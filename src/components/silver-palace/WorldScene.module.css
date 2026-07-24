@@ -1,0 +1,307 @@
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      circle at 50% 43%,
+      rgb(16 12 9 / 8%) 0,
+      rgb(8 5 3 / 34%) 55%,
+      rgb(0 0 0 / 86%) 100%
+    ),
+    linear-gradient(rgb(0 0 0 / 18%), rgb(0 0 0 / 43%)),
+    url("/silver-palace/world_bg.D5LtmynE.jpg") center / cover no-repeat;
+}
+
+.scene::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  box-shadow: inset 0 0 150px 44px rgb(0 0 0 / 72%);
+}
+
+.paperViewport {
+  position: absolute;
+  z-index: 2;
+  inset: 92px 148px 0 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+
+.paperViewport::-webkit-scrollbar {
+  display: none;
+}
+
+.paperStage {
+  position: relative;
+  width: clamp(650px, 56.25vw, 810px);
+  min-height: calc(100svh - 92px);
+  margin-left: clamp(52px, 16.8vw, 242px);
+  padding-top: 37px;
+  padding-bottom: 72px;
+}
+
+.paper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 48%));
+  animation: paperEnter 300ms ease both;
+}
+
+.paperBackground {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+.paperCopy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.view .paperCopy {
+  top: 5.5%;
+  left: 16.9%;
+  width: 66.2%;
+  height: auto;
+}
+
+.decorativeSheet {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 11px 16px rgb(0 0 0 / 45%));
+}
+
+.decorativeSheetLeft {
+  top: 445px;
+  left: -133px;
+  width: 48%;
+  transform: rotate(-2deg);
+  opacity: 0.9;
+}
+
+.decorativeSheetRight {
+  top: 101px;
+  right: -145px;
+  width: 54%;
+  transform: rotate(1.5deg);
+  opacity: 0.96;
+}
+
+.paperNav {
+  position: absolute;
+  z-index: 4;
+  top: 100px;
+  right: clamp(20px, 2.1vw, 31px);
+  display: flex;
+  width: 105px;
+  max-height: calc(100svh - 110px);
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.paperNav::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbnailButton {
+  display: flex;
+  flex: 0 0 auto;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  color: #eee4cf;
+  font: 600 10px/1.15 Arial, sans-serif;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.55;
+  background: transparent;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease,
+    filter 300ms ease;
+}
+
+.thumbnailButton:hover,
+.thumbnailButton:focus-visible {
+  opacity: 0.82;
+  transform: translateX(-3px);
+}
+
+.thumbnailButton:focus-visible {
+  outline: 1px solid #e9dcc0;
+  outline-offset: 3px;
+}
+
+.thumbnailButtonActive {
+  opacity: 1;
+  filter: drop-shadow(0 4px 7px rgb(0 0 0 / 50%));
+}
+
+.thumbnailLabel {
+  min-height: 12px;
+  text-shadow: 0 1px 4px #000;
+}
+
+.thumbnailImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+@keyframes paperEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .paperViewport {
+    inset: 74px 0 101px;
+  }
+
+  .paperStage {
+    width: min(94vw, 720px);
+    min-height: calc(100svh - 175px);
+    margin-inline: auto;
+    padding-top: 10px;
+    padding-bottom: 42px;
+  }
+
+  .decorativeSheetLeft {
+    top: 260px;
+    left: -10%;
+    width: 42%;
+  }
+
+  .decorativeSheetRight {
+    top: 72px;
+    right: -7%;
+    width: 47%;
+  }
+
+  .paperNav {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: none;
+    height: 101px;
+    box-sizing: border-box;
+    flex-direction: row;
+    gap: 8px;
+    padding: 8px 12px 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background:
+      linear-gradient(to bottom, transparent, rgb(5 3 2 / 88%) 18%),
+      rgb(4 3 2 / 42%);
+  }
+
+  .thumbnailButton {
+    width: 76px;
+    min-width: 76px;
+    gap: 3px;
+    font-size: 8px;
+  }
+
+  .thumbnailButton:hover,
+  .thumbnailButton:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .thumbnailLabel {
+    display: -webkit-box;
+    min-height: 18px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .thumbnailImage {
+    width: auto;
+    height: 66px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .scene::after {
+    box-shadow: inset 0 0 72px 18px rgb(0 0 0 / 72%);
+  }
+
+  .paperViewport {
+    inset: 59px 0 96px;
+  }
+
+  .paperStage {
+    width: 75vw;
+    min-height: calc(100svh - 155px);
+    padding-top: 26px;
+  }
+
+  .paperNav {
+    height: 96px;
+    padding-inline: 8px;
+  }
+
+  .thumbnailButton {
+    width: calc((100vw - 40px) / 4);
+    min-width: 68px;
+  }
+
+  .thumbnailImage {
+    height: 61px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .decorativeSheetLeft {
+    top: 182px;
+    left: -35%;
+    display: block;
+    width: 48%;
+  }
+
+  .decorativeSheetRight {
+    top: 61px;
+    right: -39%;
+    width: 58%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper,
+  .thumbnailButton {
+    animation: none;
+    transition: none;
+  }
+}

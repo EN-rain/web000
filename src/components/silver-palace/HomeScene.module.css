@@ -1,0 +1,140 @@
+.scene {
+  --layer-1-x: 0px;
+  --layer-1-y: 0px;
+  --layer-2-x: 0px;
+  --layer-2-y: 0px;
+  --layer-3-x: 0px;
+  --layer-3-y: 0px;
+  --layer-4-x: 0px;
+  --layer-4-y: 0px;
+
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+  touch-action: pan-x pan-y;
+}
+
+.layer,
+.mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  will-change: transform;
+}
+
+.background {
+  z-index: 0;
+  background-image: url("/silver-palace/home_bg.nynm9_TJ.jpg");
+}
+
+.parallaxOne {
+  z-index: 1;
+  background-image: url("/silver-palace/home_para1.DFCFWv0Q.png");
+  transform: translate3d(var(--layer-1-x), var(--layer-1-y), 0) scale(1.025);
+}
+
+.parallaxTwo {
+  z-index: 2;
+  background-image: url("/silver-palace/home_para2.CSWHckPL.png");
+  transform: translate3d(var(--layer-2-x), var(--layer-2-y), 0) scale(1.025);
+}
+
+.parallaxThree {
+  z-index: 3;
+  background-image: url("/silver-palace/home_para3.PwSYvyyh.png");
+  transform: translate3d(var(--layer-3-x), var(--layer-3-y), 0) scale(1.025);
+}
+
+.parallaxFour {
+  z-index: 4;
+  background-image: url("/silver-palace/home_para4.DbjoLLQN.png");
+  transform: translate3d(var(--layer-4-x), var(--layer-4-y), 0) scale(1.025);
+}
+
+.mask {
+  z-index: 5;
+  background-image: url("/silver-palace/home_mask.CVVcUCr3.png");
+}
+
+.header {
+  position: absolute;
+  z-index: 20;
+  inset: 0 0 auto;
+}
+
+.ticket {
+  position: absolute;
+  z-index: 10;
+  top: 71.875%;
+  left: 62.1%;
+  display: block;
+  width: min(394px, 31vw);
+  aspect-ratio: 2.333 / 1;
+  background-image: url("/silver-palace/en-us_frame.Dg1QKPHR.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 300% 500%;
+  line-height: 0;
+  filter: brightness(1);
+  transition:
+    translate 180ms ease,
+    filter 180ms ease;
+}
+
+.ticketButton {
+  position: absolute;
+  top: 66.7%;
+  left: 43%;
+  display: block;
+  width: 31.6%;
+  height: auto;
+  user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ticket:hover {
+    translate: 0 -6px;
+    filter: brightness(1.08);
+  }
+}
+
+.ticket:focus-visible {
+  outline: 2px solid #fff7db;
+  outline-offset: 5px;
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .parallaxOne,
+  .parallaxTwo,
+  .parallaxThree,
+  .parallaxFour {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .ticket {
+    top: auto;
+    bottom: 108px;
+    left: 50%;
+    width: min(356px, 92vw);
+    transform: translateX(-50%);
+  }
+
+  .ticket:focus-visible {
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket {
+    transition: none;
+  }
+}
