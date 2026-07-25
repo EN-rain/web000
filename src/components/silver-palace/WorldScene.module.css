@@ -1,9 +1,17 @@
 .scene {
+  --paper-scroll: 0px;
+  --scroll-progress: 0;
+  --scroll-20: 0px;
+  --scroll-30: 0px;
+  --scroll-40: 0px;
+  --scroll-60: 0px;
+
   position: relative;
   width: 100vw;
   height: 100svh;
   overflow: hidden;
   isolation: isolate;
+  outline: none;
   background:
     radial-gradient(
       circle at 50% 43%,
@@ -17,48 +25,100 @@
 
 .scene::after {
   position: absolute;
-  z-index: 1;
+  z-index: 7;
   inset: 0;
   pointer-events: none;
   content: "";
   box-shadow: inset 0 0 150px 44px rgb(0 0 0 / 72%);
 }
 
-.paperViewport {
+.worldStage {
   position: absolute;
   z-index: 2;
-  inset: 92px 148px 0 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  overscroll-behavior: contain;
+  inset: 0;
+  overflow: hidden;
+  perspective: 1800px;
 }
 
-.paperViewport::-webkit-scrollbar {
-  display: none;
-}
-
-.paperStage {
-  position: relative;
-  width: clamp(650px, 56.25vw, 810px);
-  min-height: calc(100svh - 92px);
-  margin-left: clamp(52px, 16.8vw, 242px);
-  padding-top: 37px;
-  padding-bottom: 72px;
-}
-
-.paper {
-  position: relative;
-  z-index: 2;
+.worldScrollContent {
   width: 100%;
-  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 48%));
-  animation: paperEnter 300ms ease both;
+  height: max-content;
+  min-height: 100%;
+  transform: translate3d(0, calc(var(--paper-scroll) * -1), 0);
+  will-change: transform;
+}
+
+.paperStack {
+  position: relative;
+  width: 56.29vw;
+  margin-left: 16.85vw;
+  padding-top: 13.47vh;
+}
+
+.paperCanvas {
+  position: relative;
+  width: 100%;
+  min-height: 173.5vh;
+  transform-style: preserve-3d;
+}
+
+.paperCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform:
+    translate3d(
+      var(--base-x),
+      calc(var(--base-y) - var(--parallax-shift)),
+      0
+    )
+    scale(var(--paper-scale));
+  transform-origin: 0 0;
+  filter: drop-shadow(10px 10px 5px rgb(0 0 0 / 30%));
+  will-change: transform;
+}
+
+.switching .paperCard {
+  transition: transform 880ms cubic-bezier(0.43, 0.14, 0.14, 0.93);
+}
+
+.roleactive {
+  --parallax-shift: var(--scroll-60);
+}
+
+.rolenext {
+  --parallax-shift: var(--scroll-20);
+}
+
+.rolefar {
+  --parallax-shift: var(--scroll-30);
+}
+
+.roleprevious {
+  --parallax-shift: var(--scroll-40);
+}
+
+.paperMotion {
+  position: relative;
+  width: 100%;
+  transform-origin: 50% 12%;
+  will-change: transform;
+}
+
+.paperOutgoing {
+  animation: paperThrow 880ms cubic-bezier(0.43, 0.14, 0.14, 0.93);
+}
+
+.paperIncoming {
+  animation: paperCatch 880ms cubic-bezier(0.43, 0.14, 0.14, 0.93);
 }
 
 .paperBackground {
   display: block;
   width: 100%;
   height: auto;
+  pointer-events: none;
   user-select: none;
 }
 
@@ -72,59 +132,70 @@
   user-select: none;
 }
 
-.view .paperCopy {
-  top: 5.5%;
-  left: 16.9%;
-  width: 66.2%;
+.viewCopy {
+  top: 16.55%;
+  left: 26.1%;
+  width: 49.6%;
   height: auto;
 }
 
-.decorativeSheet {
+.overlay {
   position: absolute;
-  z-index: 1;
+  display: block;
+  cursor: pointer;
+  filter: saturate(0.92) contrast(1.02);
+  transition:
+    filter 320ms ease,
+    transform 320ms ease;
+}
+
+.overlay img {
+  display: block;
+  width: 100%;
   height: auto;
-  pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 11px 16px rgb(0 0 0 / 45%));
 }
 
-.decorativeSheetLeft {
-  top: 445px;
-  left: -133px;
-  width: 48%;
-  transform: rotate(-2deg);
-  opacity: 0.9;
+.overlayHover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 280ms ease;
 }
 
-.decorativeSheetRight {
-  top: 101px;
-  right: -145px;
-  width: 54%;
-  transform: rotate(1.5deg);
-  opacity: 0.96;
+.overlayNormal {
+  opacity: 1;
+  transition: opacity 280ms ease;
+}
+
+.overlay:hover {
+  z-index: 2;
+  filter: saturate(1.08) contrast(1.05);
+  transform: scale(1.012);
+}
+
+.overlay:hover .overlayHover {
+  opacity: 1;
+}
+
+.overlay:hover .overlayNormal {
+  opacity: 0;
 }
 
 .paperNav {
   position: absolute;
-  z-index: 4;
+  z-index: 9;
   top: 100px;
-  right: clamp(20px, 2.1vw, 31px);
+  right: clamp(20px, 2.1vw, 40px);
   display: flex;
-  width: 105px;
-  max-height: calc(100svh - 110px);
+  width: 112px;
+  max-height: calc(100svh - 120px);
   flex-direction: column;
   gap: 8px;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
-.paperNav::-webkit-scrollbar {
-  display: none;
 }
 
 .thumbnailButton {
   display: flex;
-  flex: 0 0 auto;
   width: 100%;
   flex-direction: column;
   gap: 4px;
@@ -134,7 +205,7 @@
   font: 600 10px/1.15 Arial, sans-serif;
   text-align: center;
   cursor: pointer;
-  opacity: 0.55;
+  opacity: 0.5;
   background: transparent;
   transition:
     opacity 300ms ease,
@@ -142,10 +213,14 @@
     filter 300ms ease;
 }
 
-.thumbnailButton:hover,
+.thumbnailButton:disabled {
+  cursor: wait;
+}
+
+.thumbnailButton:hover:not(:disabled),
 .thumbnailButton:focus-visible {
-  opacity: 0.82;
-  transform: translateX(-3px);
+  opacity: 0.84;
+  transform: translateX(-4px);
 }
 
 .thumbnailButton:focus-visible {
@@ -155,7 +230,8 @@
 
 .thumbnailButtonActive {
   opacity: 1;
-  filter: drop-shadow(0 4px 7px rgb(0 0 0 / 50%));
+  filter: drop-shadow(0 5px 8px rgb(0 0 0 / 58%));
+  transform: translateX(-6px) scale(1.035);
 }
 
 .thumbnailLabel {
@@ -170,138 +246,105 @@
   user-select: none;
 }
 
-@keyframes paperEnter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+.scrollHint {
+  position: absolute;
+  z-index: 10;
+  bottom: 26px;
+  left: 49px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgb(238 228 207 / 72%);
+  font: 600 9px/1 Arial, sans-serif;
+  letter-spacing: 0.22em;
+  pointer-events: none;
+  writing-mode: vertical-rl;
+}
+
+.scrollHint i {
+  position: relative;
+  width: 1px;
+  height: 72px;
+  overflow: hidden;
+  background: rgb(238 228 207 / 22%);
+}
+
+.scrollHint i::after {
+  position: absolute;
+  top: -45%;
+  left: 0;
+  width: 1px;
+  height: 42%;
+  content: "";
+  background: #eee4cf;
+  animation: scrollTrace 1.8s ease-in-out infinite;
+}
+
+@keyframes paperThrow {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
 
-  to {
-    opacity: 1;
+  45% {
+    transform: translate3d(4vw, 72vh, 60px) rotate(7deg) scale(1.07);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes paperCatch {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  42% {
+    transform: translate3d(-2vw, 28vh, 40px) rotate(-3.5deg);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes scrollTrace {
+  0% {
     transform: translateY(0);
   }
-}
 
-@media (max-width: 900px) {
-  .paperViewport {
-    inset: 74px 0 101px;
-  }
-
-  .paperStage {
-    width: min(94vw, 720px);
-    min-height: calc(100svh - 175px);
-    margin-inline: auto;
-    padding-top: 10px;
-    padding-bottom: 42px;
-  }
-
-  .decorativeSheetLeft {
-    top: 260px;
-    left: -10%;
-    width: 42%;
-  }
-
-  .decorativeSheetRight {
-    top: 72px;
-    right: -7%;
-    width: 47%;
-  }
-
-  .paperNav {
-    top: auto;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    max-height: none;
-    height: 101px;
-    box-sizing: border-box;
-    flex-direction: row;
-    gap: 8px;
-    padding: 8px 12px 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    background:
-      linear-gradient(to bottom, transparent, rgb(5 3 2 / 88%) 18%),
-      rgb(4 3 2 / 42%);
-  }
-
-  .thumbnailButton {
-    width: 76px;
-    min-width: 76px;
-    gap: 3px;
-    font-size: 8px;
-  }
-
-  .thumbnailButton:hover,
-  .thumbnailButton:focus-visible {
-    transform: translateY(-2px);
-  }
-
-  .thumbnailLabel {
-    display: -webkit-box;
-    min-height: 18px;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .thumbnailImage {
-    width: auto;
-    height: 66px;
-    margin-inline: auto;
+  70%,
+  100% {
+    transform: translateY(345%);
   }
 }
 
-@media (max-width: 560px) {
-  .scene::after {
-    box-shadow: inset 0 0 72px 18px rgb(0 0 0 / 72%);
-  }
-
-  .paperViewport {
-    inset: 59px 0 96px;
-  }
-
-  .paperStage {
-    width: 75vw;
-    min-height: calc(100svh - 155px);
-    padding-top: 26px;
+@media (max-width: 1100px) {
+  .paperStack {
+    width: 62vw;
+    margin-left: 11vw;
   }
 
   .paperNav {
-    height: 96px;
-    padding-inline: 8px;
-  }
-
-  .thumbnailButton {
-    width: calc((100vw - 40px) / 4);
-    min-width: 68px;
-  }
-
-  .thumbnailImage {
-    height: 61px;
-    max-width: 100%;
-    object-fit: contain;
-  }
-
-  .decorativeSheetLeft {
-    top: 182px;
-    left: -35%;
-    display: block;
-    width: 48%;
-  }
-
-  .decorativeSheetRight {
-    top: 61px;
-    right: -39%;
-    width: 58%;
+    right: 18px;
+    width: 96px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .paper,
-  .thumbnailButton {
+  .paperCard {
+    transition-duration: 1ms;
+  }
+
+  .paperOutgoing,
+  .paperIncoming,
+  .scrollHint i::after {
     animation: none;
-    transition: none;
+  }
+
+  .overlay,
+  .overlay img,
+  .thumbnailButton {
+    transition-duration: 1ms;
   }
 }

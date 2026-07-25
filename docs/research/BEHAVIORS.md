@@ -5,7 +5,11 @@
 - Header controls brighten on hover.
 - Home layers move at different rates with pointer movement on desktop.
 - Home uses a fixed 2667:1440 artwork composition with `cover`-style cropping.
-- World thumbnail buttons switch among four paper scenes.
+- World is primarily wheel-driven: a fixed viewport consumes wheel input and
+  smoothly translates the full desk while each stacked paper moves at a
+  different parallax rate. Continued wheel input at a boundary remains clamped.
+- World keeps all four papers mounted and uses roughly 900ms translated,
+  rotated, scaled stack transitions when a thumbnail selects another paper.
 - Active world thumbnail is brighter and slightly enlarged.
 - World overlays crossfade from normal to hover artwork.
 - Mobile replaces the wide desktop header with logo, pre-register, icon, and hamburger.
@@ -20,4 +24,3 @@
 - Media Gallery uses a horizontally translated track. The active card scales to 1 while neighbors dim and scale down.
 - Gallery supports buttons, thumbnails, mouse wheel, keyboard arrows, and pointer drag.
 - All motion is disabled or shortened under `prefers-reduced-motion`.
-
