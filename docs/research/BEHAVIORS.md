@@ -5,6 +5,9 @@
 - Header controls brighten on hover.
 - Home layers move at different rates with pointer movement on desktop.
 - Home uses a fixed 2667:1440 artwork composition with `cover`-style cropping.
+- Home captures desktop wheel input as cinematic route progress: the layered
+  hero fades to `home_bg3`, the `#02 Character Introduction` title rises from
+  300px below, and completion navigates to `/en-us/roles`. Wheel-up reverses it.
 - World is primarily wheel-driven: a fixed viewport consumes wheel input and
   smoothly translates the full desk while each stacked paper moves at a
   different parallax rate. Continued wheel input at a boundary remains clamped.
