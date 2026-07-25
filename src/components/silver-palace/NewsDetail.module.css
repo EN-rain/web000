@@ -1,0 +1,329 @@
+.page {
+  position: fixed;
+  inset: 0;
+  min-width: 1180px;
+  overflow: hidden;
+  color: #34363a;
+  background: #e5e5e7 url("/silver-palace/news_bg.LVNfMlKE.jpg") center top / cover no-repeat;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page::before,
+.page::after {
+  position: fixed;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.page::before {
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 21%, transparent 0 34%, rgb(32 35 42 / 6%) 100%),
+    linear-gradient(90deg, rgb(26 29 36 / 10%), transparent 16% 84%, rgb(26 29 36 / 10%));
+  mix-blend-mode: multiply;
+}
+
+.page::after {
+  top: 145px;
+  right: calc(50% - 520px);
+  width: 72px;
+  height: 72px;
+  background: url("/silver-palace/news_stamp.DxbbmV9a.png") center / contain no-repeat;
+  opacity: 0.92;
+}
+
+.detailScroll {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgb(58 61 69 / 48%) transparent;
+  scrollbar-width: thin;
+}
+
+.articleShell {
+  width: 1080px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 128px 0 0;
+}
+
+.backLink {
+  position: sticky;
+  z-index: 12;
+  top: 94px;
+  display: inline-flex;
+  margin-left: -4px;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 15px 9px 12px;
+  color: #3e435a;
+  background: rgb(239 238 235 / 86%);
+  border: 1px solid rgb(61 65 80 / 20%);
+  box-shadow: 0 5px 18px rgb(25 28 36 / 10%);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 180ms ease, transform 180ms ease, background-color 180ms ease;
+  backdrop-filter: blur(7px);
+}
+
+.backLink:hover {
+  color: #252943;
+  background: rgb(247 246 242 / 96%);
+  transform: translateX(-3px);
+}
+
+.article {
+  width: 960px;
+  margin: -10px auto 0;
+}
+
+.articleHeader {
+  min-height: 210px;
+  padding: 0 70px 42px;
+  text-align: center;
+}
+
+.articleHeader h1 {
+  max-width: 800px;
+  margin: 9px auto 29px;
+  color: #35373b;
+  font-size: 44px;
+  line-height: 1.08;
+  letter-spacing: 0.015em;
+  animation: titleFadeUp 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.category {
+  margin: 0;
+  color: #6c5d83;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.articleHeader time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #272a30;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+}
+
+.articleHeader time span {
+  color: #777985;
+  font-size: 9px;
+}
+
+.content {
+  padding-bottom: 76px;
+}
+
+.section,
+.majorSection,
+.summarySection {
+  margin: 0 0 47px;
+}
+
+.section h3,
+.majorSection h2,
+.summarySection h2 {
+  position: relative;
+  width: fit-content;
+  margin: 0 0 23px;
+  color: #414579;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+.section h3 {
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.majorSection {
+  margin-top: 74px;
+}
+
+.majorSection:first-child {
+  margin-top: 0;
+}
+
+.majorSection h2,
+.summarySection h2 {
+  color: #363940;
+  font-size: 30px;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-color: rgb(54 57 64 / 45%);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+}
+
+.majorSection h2::before,
+.summarySection h2::before {
+  display: inline-block;
+  margin-right: 12px;
+  color: #53588e;
+  content: "✥";
+  font-size: 21px;
+  text-decoration: none;
+}
+
+.section p,
+.majorSection p,
+.summarySection p {
+  margin: 0 0 35px;
+  color: #3f4248;
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+.section em,
+.majorSection em {
+  color: #7f6045;
+  font-style: normal;
+}
+
+.imageReveal {
+  width: 960px;
+  height: 540px;
+  margin-top: 13px;
+  overflow: hidden;
+  background: #babcc3;
+  border: 2px solid rgb(45 49 61 / 52%);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 50%) inset,
+    0 12px 32px rgb(33 36 44 / 17%);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 900ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.imageReveal img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.075);
+  transition: transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.imageReveal[data-visible="true"] {
+  clip-path: inset(0);
+}
+
+.imageReveal[data-visible="true"] img {
+  transform: scale(1);
+}
+
+.section[data-reveal],
+.majorSection[data-reveal],
+.summarySection[data-reveal],
+.footer[data-reveal] {
+  opacity: 0;
+  transform: translateY(34px);
+  transition:
+    opacity 700ms ease,
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section[data-visible="true"],
+.majorSection[data-visible="true"],
+.summarySection[data-visible="true"],
+.footer[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.summarySection {
+  padding-top: 5px;
+}
+
+.summarySection .imageReveal {
+  margin: 0 0 34px;
+}
+
+.footer {
+  width: 100vw;
+  margin-left: calc((1080px - 100vw) / 2);
+  padding: 52px max(40px, calc((100vw - 960px) / 2)) 58px;
+  color: #d8d2c5;
+  background: rgb(29 31 37 / 94%);
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer nav {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 17px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+}
+
+.footer a {
+  color: #eee7d5;
+  transition: color 180ms ease;
+}
+
+.footer a:hover {
+  color: #fff;
+}
+
+.footer p {
+  margin: 2px 0;
+}
+
+@keyframes titleFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .articleHeader h1 {
+    animation: none;
+  }
+
+  .backLink,
+  .imageReveal,
+  .imageReveal img,
+  .section[data-reveal],
+  .majorSection[data-reveal],
+  .summarySection[data-reveal],
+  .footer[data-reveal] {
+    transition: none;
+  }
+
+  .imageReveal {
+    clip-path: inset(0);
+  }
+
+  .imageReveal img,
+  .section[data-reveal],
+  .majorSection[data-reveal],
+  .summarySection[data-reveal],
+  .footer[data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

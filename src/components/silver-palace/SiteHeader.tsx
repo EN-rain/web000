@@ -2,12 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { CSSProperties } from "react";
 import { useState } from "react";
 import styles from "./SiteHeader.module.css";
+
+const navigation = [
+  { number: "#01", label: "Home", href: "/en-us/home" },
+  { number: "#02", label: "Character Introduction", href: "/en-us/roles" },
+  { number: "#03", label: "News", href: "/en-us/news" },
+  { number: "#04", label: "Media Gallery", href: "/en-us/features" },
+  { number: "#05", label: "Game Features", href: "/en-us/world" },
+] as const;
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [reserveOpen, setReserveOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <>
@@ -52,13 +63,32 @@ export function SiteHeader() {
         </div>
       </header>
 
-      <nav className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ""}`}>
-        <Link href="/en-us/home" onClick={() => setMenuOpen(false)}>
-          Home
-        </Link>
-        <Link href="/en-us/world" onClick={() => setMenuOpen(false)}>
-          World
-        </Link>
+      <nav
+        aria-hidden={!menuOpen}
+        className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ""}`}
+      >
+        <div className={styles.drawerWash} aria-hidden="true" />
+        <div className={styles.menuRows}>
+          {navigation.map((item, index) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                className={`${styles.menuRow} ${active ? styles.menuRowActive : ""}`}
+                href={item.href}
+                key={item.href}
+                onClick={() => setMenuOpen(false)}
+                style={{ "--menu-index": index } as CSSProperties}
+                tabIndex={menuOpen ? 0 : -1}
+              >
+                <span className={styles.menuNumber}>{item.number}</span>
+                <span className={styles.menuLabel}>{item.label}</span>
+                <span className={styles.menuArrow} aria-hidden="true">
+                  ↗
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
 
       {reserveOpen ? (
@@ -90,4 +120,3 @@ export function SiteHeader() {
     </>
   );
 }
-

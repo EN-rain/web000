@@ -86,35 +86,106 @@
 
 .drawer {
   position: fixed;
-  z-index: 45;
-  top: 73px;
-  left: 50%;
-  display: flex;
-  width: min(420px, calc(100vw - 48px));
-  justify-content: center;
-  gap: 42px;
-  padding: 19px 28px;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 105px 10vw 50px;
   color: #eee3c2;
-  background: rgb(10 8 7 / 88%);
-  border: 1px solid rgb(229 213 172 / 24%);
+  background:
+    radial-gradient(circle at 72% 25%, rgb(68 62 92 / 31%), transparent 38%),
+    rgb(7 7 9 / 94%);
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -12px);
-  transition: opacity 220ms ease, transform 220ms ease;
-  backdrop-filter: blur(9px);
+  transition: opacity 350ms ease;
+  backdrop-filter: blur(12px);
 }
 
 .drawerOpen {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(-50%, 0);
 }
 
-.drawer a {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 18px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.drawerWash {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.drawerWash::before {
+  position: absolute;
+  top: -20%;
+  right: 2%;
+  width: 55vw;
+  height: 130vh;
+  content: "";
+  background: linear-gradient(145deg, transparent 28%, rgb(114 99 174 / 14%), transparent 70%);
+  transform: rotate(-11deg);
+  animation: menuWash 8s ease-in-out infinite alternate;
+}
+
+.menuRows {
+  position: relative;
+  width: min(850px, 75vw);
+  border-top: 1px solid rgb(241 229 190 / 24%);
+}
+
+.menuRow {
+  display: grid;
+  min-height: 92px;
+  grid-template-columns: 90px 1fr 54px;
+  align-items: center;
+  border-bottom: 1px solid rgb(241 229 190 / 18%);
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    padding 220ms ease;
+}
+
+.drawerOpen .menuRow {
+  animation: menuRowIn 480ms cubic-bezier(.2, .7, .2, 1) forwards;
+  animation-delay: calc(90ms + var(--menu-index) * 70ms);
+}
+
+.menuRow:hover,
+.menuRowActive {
+  padding-inline: 20px;
+  color: #171312;
+  background: linear-gradient(90deg, #f1e8ce, #d8caab);
+}
+
+.menuNumber {
+  font: 600 14px/1 Georgia, serif;
+  letter-spacing: .12em;
+}
+
+.menuLabel {
+  font: 400 clamp(30px, 3.1vw, 48px)/1 Georgia, "Times New Roman", serif;
+}
+
+.menuArrow {
+  justify-self: end;
+  font-size: 24px;
+  transition: transform 220ms ease;
+}
+
+.menuRow:hover .menuArrow {
+  transform: translate(5px, -5px);
+}
+
+@keyframes menuRowIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menuWash {
+  to {
+    transform: translate(-4%, 2%) rotate(-8deg);
+  }
 }
 
 .modalBackdrop {
@@ -223,13 +294,35 @@
   }
 
   .drawer {
-    top: 59px;
+    padding: 82px 20px 24px;
+  }
+
+  .menuRows {
     width: 100%;
-    border-right: 0;
-    border-left: 0;
+  }
+
+  .menuRow {
+    min-height: 70px;
+    grid-template-columns: 55px 1fr 34px;
+  }
+
+  .menuLabel {
+    font-size: 25px;
   }
 
   .modal {
     padding: 40px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawerWash::before,
+  .drawerOpen .menuRow {
+    animation: none;
+  }
+
+  .drawerOpen .menuRow {
+    opacity: 1;
+    transform: none;
   }
 }

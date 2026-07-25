@@ -1,0 +1,550 @@
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 720px;
+  overflow: hidden;
+  color: #e9e8e3;
+  background: #05070c url("/silver-palace/char_bg.C_73WKtR.jpg") center / cover no-repeat;
+  isolation: isolate;
+}
+
+.backgroundVideo,
+.technicalOverlay,
+.haze,
+.particles {
+  position: absolute;
+  inset: 0;
+}
+
+.backgroundVideo {
+  z-index: -5;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.technicalOverlay {
+  z-index: -3;
+  background: url("/silver-palace/char_back.VAWs2PDN.png") center 40% / min(85vw, 1221px) auto no-repeat;
+  opacity: 0.46;
+  mix-blend-mode: screen;
+}
+
+.haze {
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgb(1 3 8 / 5%) 0%, rgb(1 3 8 / 3%) 46%, rgb(1 3 8 / 24%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 17%) 0%, transparent 47%, rgb(220 227 247 / 13%) 100%);
+  box-shadow: inset 0 0 130px 30px rgb(0 0 0 / 38%);
+}
+
+.particles {
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particles i {
+  position: absolute;
+  top: var(--particle-y);
+  left: var(--particle-x);
+  width: var(--particle-size);
+  height: var(--particle-size);
+  background: #e9d37b;
+  border-radius: 1px;
+  box-shadow: 0 0 7px rgb(255 231 131 / 65%);
+  opacity: var(--particle-opacity);
+  transform: rotate(45deg);
+  animation: particleDrift var(--particle-duration) var(--particle-delay) ease-in-out infinite alternate;
+}
+
+.copy {
+  position: absolute;
+  z-index: 5;
+  top: 25.4%;
+  left: max(7vw, calc(50% - 540px));
+  width: 430px;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 52%);
+}
+
+.name {
+  width: 365px;
+  height: 65px;
+}
+
+.name img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.identityRow {
+  display: flex;
+  height: 37px;
+  align-items: center;
+  gap: 17px;
+  margin-top: 19px;
+}
+
+.epithet {
+  position: relative;
+  display: grid;
+  min-width: 188px;
+  height: 23px;
+  place-items: center;
+  padding: 0 25px;
+  color: #171615;
+  background: #f7f0d8;
+  clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 50%, calc(100% - 5px) 100%, 5px 100%, 0 50%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: none;
+}
+
+.epithet::before,
+.epithet::after {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #2e2a22;
+  content: "";
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.epithet::before {
+  left: 8px;
+}
+
+.epithet::after {
+  right: 8px;
+}
+
+.factionButton {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 9px;
+  border: 0;
+  color: #e4d9ff;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  opacity: 0.86;
+  cursor: pointer;
+  transition: color 180ms ease, filter 180ms ease;
+}
+
+.factionButton span {
+  color: #8a55e8;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.factionButton:hover,
+.factionButton:focus-visible {
+  color: #fff7dc;
+  filter: drop-shadow(0 0 7px #8855e7);
+}
+
+.quote {
+  width: 400px;
+  margin: 27px 0 0;
+  color: #f3f2ee;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.22;
+}
+
+.biography {
+  width: 430px;
+  margin: 26px 0 0;
+  color: rgb(235 236 239 / 76%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.48;
+  white-space: pre-line;
+}
+
+.characterArt {
+  position: absolute;
+  z-index: 2;
+  top: 12%;
+  left: 36%;
+  width: min(73vw, 1050px);
+  height: 98%;
+  pointer-events: none;
+  filter: drop-shadow(12px 15px 25px rgb(0 0 0 / 24%));
+}
+
+.characterArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.copy.exiting,
+.characterArt.exiting {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.copy.entering {
+  animation: copyReveal 450ms both;
+}
+
+.copy.entering .identityRow {
+  animation: detailReveal 450ms 65ms both;
+}
+
+.copy.entering .quote {
+  animation: detailReveal 450ms 120ms both;
+}
+
+.copy.entering .biography {
+  animation: detailReveal 450ms 175ms both;
+}
+
+.characterArt.entering {
+  animation: artReveal 450ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.carousel {
+  position: absolute;
+  z-index: 8;
+  top: 67%;
+  left: max(7vw, calc(50% - 540px));
+  display: grid;
+  width: 415px;
+  height: 92px;
+  grid-template-columns: 52px 1fr 52px;
+  align-items: center;
+  padding: 0 8px;
+  background: rgb(8 9 12 / 86%) url("/silver-palace/char_select_bg.BRJsbPIu.png") center / 100% 100% no-repeat;
+  border-radius: 48px;
+  box-shadow:
+    inset 0 0 0 1px rgb(236 224 190 / 42%),
+    0 7px 22px rgb(0 0 0 / 35%);
+}
+
+.arrow {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.arrow img {
+  width: 43px;
+  height: 43px;
+}
+
+.arrow:hover,
+.arrow:focus-visible {
+  filter: brightness(1.18) drop-shadow(0 0 5px rgb(255 244 200 / 45%));
+  transform: scale(1.06);
+}
+
+.next img {
+  transform: rotate(180deg);
+}
+
+.avatarViewport {
+  width: 295px;
+  overflow: hidden;
+}
+
+.avatarTrack {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 7px;
+  transform: translateX(calc(var(--visible-start) * -73px));
+  transition: transform 300ms cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+
+.avatar {
+  position: relative;
+  display: grid;
+  width: 66px;
+  height: 66px;
+  flex: 0 0 66px;
+  place-items: center;
+  padding: 0;
+  border: 2px solid rgb(238 225 183 / 30%);
+  border-radius: 50%;
+  background: #22242c;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 55%);
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.avatar:hover {
+  border-color: rgb(247 236 198 / 75%);
+  transform: translateY(-2px);
+}
+
+.activeAvatar {
+  border-color: #fff0b9;
+  box-shadow:
+    0 0 0 2px rgb(47 41 29 / 85%),
+    0 0 0 4px #e9d69c,
+    0 0 16px 3px rgb(246 222 151 / 58%);
+}
+
+.galleryBackdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 50%, rgb(40 32 65 / 32%), transparent 58%),
+    rgb(1 2 6 / 93%);
+  backdrop-filter: blur(8px);
+  animation: backdropIn 250ms ease both;
+}
+
+.gallery {
+  position: relative;
+  display: flex;
+  width: min(1050px, calc(100vw - 100px));
+  height: min(780px, calc(100vh - 80px));
+  justify-content: center;
+  gap: 28px;
+  padding: 34px 105px 34px 120px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgb(6 7 13 / 96%), rgb(16 13 27 / 93%)),
+    url("/silver-palace/camp_tabs_bg.DszKobvJ.jpg") center / cover;
+  border: 1px solid rgb(213 194 156 / 35%);
+  box-shadow:
+    0 28px 100px rgb(0 0 0 / 75%),
+    inset 0 0 80px rgb(89 61 142 / 14%);
+  animation: galleryIn 360ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.gallery::before,
+.gallery::after {
+  position: absolute;
+  pointer-events: none;
+  content: "";
+}
+
+.gallery::before {
+  inset: 12px;
+  border: 1px solid rgb(224 207 167 / 13%);
+}
+
+.gallery::after {
+  inset: 0;
+  background: linear-gradient(135deg, transparent 47%, rgb(135 83 202 / 8%) 50%, transparent 53%);
+}
+
+.galleryTabs {
+  position: absolute;
+  z-index: 2;
+  top: 115px;
+  left: 23px;
+  display: grid;
+  gap: 18px;
+}
+
+.galleryTab {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  background: url("/silver-palace/camp_tab_bg.BQfH4a0c.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 5px 9px rgb(0 0 0 / 42%));
+}
+
+.galleryTab img {
+  width: 55px;
+  height: 55px;
+}
+
+.galleryCard,
+.comingSoon {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  aspect-ratio: 545 / 1392;
+  overflow: hidden;
+  box-shadow: 0 14px 35px rgb(0 0 0 / 50%);
+}
+
+.galleryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galleryFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.comingSoon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galleryClose {
+  position: absolute;
+  z-index: 4;
+  top: 18px;
+  right: 21px;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: filter 180ms ease, transform 180ms ease;
+}
+
+.galleryClose img {
+  width: 100%;
+  height: 100%;
+}
+
+.galleryClose:hover,
+.galleryClose:focus-visible {
+  filter: brightness(1.22) drop-shadow(0 0 9px rgb(230 207 168 / 38%));
+  transform: rotate(8deg) scale(1.05);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes particleDrift {
+  0% {
+    translate: -8px 18px;
+    opacity: 0.16;
+  }
+
+  55% {
+    opacity: 0.75;
+  }
+
+  100% {
+    translate: 24px -22px;
+    opacity: 0.3;
+  }
+}
+
+@keyframes copyReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes detailReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes artReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes galleryIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles i,
+  .copy.entering,
+  .copy.entering .identityRow,
+  .copy.entering .quote,
+  .copy.entering .biography,
+  .characterArt.entering,
+  .galleryBackdrop,
+  .gallery {
+    animation: none;
+  }
+
+  .copy,
+  .characterArt,
+  .avatarTrack,
+  .avatar,
+  .arrow,
+  .galleryClose {
+    transition: none;
+  }
+}

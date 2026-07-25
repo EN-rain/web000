@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { access, mkdir, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 
 const outputDir = join(process.cwd(), "public", "silver-palace");
@@ -58,6 +58,99 @@ const urls = [
   "https://silverpalace.elementagames.com/_nuxt/world_img_8_hover.ivNEPki2.png",
   "https://silverpalace.elementagames.com/_nuxt/world_img_9.amO_NhWj.png",
   "https://silverpalace.elementagames.com/_nuxt/world_img_9_hover.DqhdcC3N.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_back_apng.CoQTQEky.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_bg.C_73WKtR.jpg",
+  "https://silverpalace.elementagames.com/media/char_bg.mp4",
+  "https://silverpalace.elementagames.com/_nuxt/char_back.VAWs2PDN.png",
+  "https://silverpalace.elementagames.com/_nuxt/tag_bg_en.B83Xrr3i.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_select_bg.BRJsbPIu.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_prev.Bb9C33u2.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_more_apng.B8D4VV2n.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_btn_close.DyVe57z7.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_tabs_bg.DszKobvJ.jpg",
+  "https://silverpalace.elementagames.com/_nuxt/camp_tab_bg.BQfH4a0c.png",
+  "https://silverpalace.elementagames.com/_nuxt/btn_camp2.Cxf64rpW.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_card_bg.BaQlEtJ5.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_coming_soon.Bzs9pecb.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_tab_logo5.BDj2Tfym.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_tab_logo4.C9Eck2o2.png",
+  "https://silverpalace.elementagames.com/_nuxt/camp_img_0_en.CYFwA4Ty.jpg",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_0.D6JuRUsV.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_1.DAmaJ3_o.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_2.DHefS2Mn.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_3.BVO2aTFZ.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_4.BwBHX7Rl.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_5.7zT1VTg7.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_6.DyLxpzd5.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_7.C9p183YM.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_8.BAOUOA6s.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_9.BUlLkfWb.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_10.8SQ7G1qU.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_11.OMd2oYoS.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_12.DjHtwDmf.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_13.YmDSC-f6.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_2d_img_14.C_PXraXO.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_1_en.wN2x7EfZ.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_2_en.BgnMlxBE.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_3_en.BohLfB8Z.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_4_en.CREvZTR2.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_5_en.DYUFo5bA.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_6_en.BM16dmuJ.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_7_en.CMnnXIcA.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_8_en.C4C5I5An.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_9_en.DXRKR8Eh.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_10_en.CGOVAMqP.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_11_en.Cbh_anL6.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_12_en.DrlcHCCR.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_13_en.DlwxAtwJ.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_name_14_en.B1_5v2sf.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_0.D5gjC9CF.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_1.DC-DxS4p.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_2.CcIJ_T8L.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_3.BuJVHaW_.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_4.DmxszYUP.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_5.b4q62fU7.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_6.D1huW33M.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_7.1UWBWFae.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_8.xU10YK2d.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_9.C3iRV1e6.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_10.bNc7JfhI.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_11.PeqxRCml.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_12.DNBHx-Cz.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_13.DK-5QCZD.png",
+  "https://silverpalace.elementagames.com/_nuxt/char_avatar_14.DzqLTBcF.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_bg.LVNfMlKE.jpg",
+  "https://silverpalace.elementagames.com/_nuxt/news_title_eles2.Bus7s6_o.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_banner_paper2.C8ey2wH-.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_banner_paper3.BSNN3bdW.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_banner_paper1.iamDkDFZ.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_stamp.DxbbmV9a.png",
+  "https://silverpalace.elementagames.com/_nuxt/btn_blue.BwF0e0Og.png",
+  "https://silverpalace.elementagames.com/_nuxt/btn_black.D1oXwvvk.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_paper_back.Bs4nftb5.png",
+  "https://silverpalace.elementagames.com/_nuxt/news_card.BadkP41L.png",
+  "https://s.elementagames.com/official/image/20260713/e3ffcc450a3aa1ec6d03e37b9d93f25b.png",
+  "https://s.elementagames.com/official/image/20260721/cf2dbfa68b6560c1e92be41adb530e0e.jpg",
+  "https://s.elementagames.com/official/image/20260720/e24ae811f9b65458734c93b8ae76660b.png",
+  "https://s.elementagames.com/official/image/20260709/4d9dc0d197981c63a422344473aca217.jpg",
+  "https://s.elementagames.com/official/image/20260720/046779ee99d6f64a4f6053b1048eeb93.png",
+  "https://s.elementagames.com/official/image/20260716/475114fe9c79a16d278e1da7fcf8daff.png",
+  "https://silverpalace.elementagames.com/_nuxt/feature_bg2.DhK7u9hK.jpg",
+  "https://silverpalace.elementagames.com/_nuxt/feature_bg.CW8kmxgY.jpg",
+  "https://silverpalace.elementagames.com/_nuxt/feature_info_bg_hover.CFcIQiaQ.png",
+  "https://s.elementagames.com/official/image/20260702/cdebcaf09b07539a15ad9352ec0c3466.png",
+  "https://s.elementagames.com/official/image/20260626/6521893e681e3d011bd249e6ff16c917.jpg",
+  "https://s.elementagames.com/official/image/20260624/0c75f1e391b3dc5b4063a90bdcac03e1.jpg",
+  "https://s.elementagames.com/official/image/20260624/043165b117087a3c0bcb19c6dbf6f201.jpg",
+  "https://s.elementagames.com/official/image/20260721/c00c394f7ebc98382cd8a2d76e44d005.jpg",
+  "https://s.elementagames.com/official/image/20260721/97ed095134eb087715cec83675025e3d.jpg",
+  "https://s.elementagames.com/official/image/20260721/173ed7d781e73dbe0a9c12183e558432.jpg",
+  "https://s.elementagames.com/official/image/20260721/70bb4ba828639cabe5d9b3082daa798a.jpg",
+  "https://s.elementagames.com/official/image/20260721/93bfa85a9e56001f746a9feda85ac630.jpg",
+  "https://s.elementagames.com/official/image/20260721/2a0a99ff57f3d43776a8a00ddd416a21.jpg",
+  "https://s.elementagames.com/official/image/20260721/0d3450c1ffd7ed4c16a4db037e716b26.jpg",
+  "https://s.elementagames.com/official/image/20260721/290a032d33b1f5f82b1a56ec7e1a2160.jpg",
+  "https://s.elementagames.com/official/image/20260721/c82863cbbde5fdabf8f9824e8ef193ae.jpg",
 ];
 
 await mkdir(outputDir, { recursive: true });
@@ -67,11 +160,19 @@ const workers = Array.from({ length: 4 }, async () => {
   while (index < urls.length) {
     const url = urls[index++];
     const filename = basename(new URL(url).pathname);
+    const destination = join(outputDir, filename);
+    try {
+      await access(destination);
+      process.stdout.write(`existing ${filename}\n`);
+      continue;
+    } catch {
+      // Download missing assets below.
+    }
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`${response.status} ${response.statusText}: ${url}`);
     }
-    await writeFile(join(outputDir, filename), Buffer.from(await response.arrayBuffer()));
+    await writeFile(destination, Buffer.from(await response.arrayBuffer()));
     process.stdout.write(`downloaded ${filename}\n`);
   }
 });

@@ -1,0 +1,446 @@
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  color: #151515;
+  background: #d9dcde;
+}
+
+.newsScroll {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  background:
+    linear-gradient(rgb(239 243 245 / 8%), rgb(222 226 229 / 10%)),
+    url("/silver-palace/news_bg.LVNfMlKE.jpg") top center / 1440px auto
+      repeat-y;
+  scrollbar-color: rgb(40 43 47 / 48%) transparent;
+  scrollbar-width: thin;
+}
+
+.content {
+  position: relative;
+  width: 1080px;
+  min-height: 1717px;
+  margin: 0 auto;
+  padding-top: 154px;
+  padding-bottom: 110px;
+}
+
+.titleBlock {
+  position: relative;
+  width: 430px;
+  height: 120px;
+}
+
+.titleBlock h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.titleBlock img {
+  position: absolute;
+  top: 73px;
+  left: 0;
+  width: 448px;
+  height: 84px;
+  object-fit: contain;
+  object-position: left top;
+}
+
+.hero {
+  position: relative;
+  height: 404px;
+}
+
+.headlines {
+  position: absolute;
+  z-index: 4;
+  top: 48px;
+  left: 14px;
+  width: 400px;
+}
+
+.headline {
+  position: relative;
+  display: flex;
+  min-height: 49px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 8px 13px;
+  border-bottom: 1px solid rgb(16 22 25 / 15%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  transition:
+    color 220ms ease,
+    background-color 220ms ease,
+    transform 220ms ease;
+}
+
+.headline::before {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  width: 0;
+  height: 9px;
+  border-radius: 50%;
+  background: #1539a8;
+  content: "";
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    width 220ms ease,
+    opacity 220ms ease;
+}
+
+.headline span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headline b {
+  flex: 0 0 auto;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.headline:hover,
+.headline:focus-visible,
+.activeHeadline {
+  padding-left: 27px;
+  background: rgb(185 194 207 / 43%);
+  color: #101a49;
+  outline: none;
+  transform: translateX(3px);
+}
+
+.headline:hover::before,
+.headline:focus-visible::before,
+.activeHeadline::before {
+  width: 9px;
+  opacity: 1;
+}
+
+.preview {
+  position: absolute;
+  z-index: 2;
+  top: -72px;
+  left: 526px;
+  width: 565px;
+  height: 424px;
+  filter: drop-shadow(0 14px 14px rgb(35 42 47 / 16%));
+}
+
+.previewBack {
+  position: absolute;
+  z-index: 0;
+  top: 59px;
+  left: -27px;
+  width: 305px;
+  height: 316px;
+  object-fit: fill;
+}
+
+.previewPaper {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 565px;
+  height: 399px;
+  object-fit: fill;
+}
+
+.previewImage {
+  position: absolute;
+  z-index: 2;
+  top: 73px;
+  left: 38px;
+  width: 492px;
+  height: 277px;
+  overflow: hidden;
+  background: #bdc5c4;
+  transform: rotate(-0.8deg);
+}
+
+.previewImage img {
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 300ms ease,
+    transform 600ms ease;
+}
+
+.previewImage .previewImageActive {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.previewFrame {
+  position: absolute;
+  z-index: 3;
+  top: 55px;
+  left: 24px;
+  width: 522px;
+  height: 324px;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.stamp {
+  position: absolute;
+  z-index: 4;
+  bottom: 24px;
+  left: 206px;
+  width: 60px;
+  height: 61px;
+  filter: drop-shadow(0 3px 3px rgb(0 0 0 / 25%));
+  transform: rotate(8deg);
+}
+
+.newsGridSection {
+  scroll-margin-top: 92px;
+}
+
+.categories {
+  display: flex;
+  width: 462px;
+  gap: 7px;
+  margin-bottom: 55px;
+}
+
+.categories button {
+  width: 111px;
+  height: 33px;
+  padding: 0 12px;
+  border: 0;
+  color: #f2f2ef;
+  background: url("/silver-palace/btn_black.D1oXwvvk.png") center / 100% 100%
+    no-repeat;
+  font: 700 12px/1 Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  transition:
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.categories button:hover,
+.categories button:focus-visible {
+  filter: brightness(1.3);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.categories .activeCategory {
+  background-image: url("/silver-palace/btn_blue.BwF0e0Og.png");
+}
+
+.cards {
+  display: grid;
+  min-height: 525px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 31px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.cardsVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card {
+  position: relative;
+  height: 520px;
+  padding: 25px 24px 34px;
+  background: url("/silver-palace/news_card.BadkP41L.png") center / 100% 100%
+    no-repeat;
+  filter: brightness(0.98) drop-shadow(0 7px 8px rgb(48 54 60 / 13%));
+  transition:
+    filter 260ms ease,
+    transform 260ms ease;
+}
+
+.card:hover,
+.card:focus-within {
+  filter: brightness(1.08) drop-shadow(0 18px 16px rgb(38 44 50 / 26%));
+  transform: translateY(-8px);
+}
+
+.card > a {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.cardImage {
+  position: relative;
+  height: 181px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgb(20 29 33 / 55%);
+  background: #aeb5b6;
+}
+
+.cardImage img {
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .cardImage img,
+.card:focus-within .cardImage img {
+  transform: scale(1.045);
+}
+
+.cardCopy {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: 17px 6px 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #596165;
+  font: 700 11px/1.2 Arial, Helvetica, sans-serif;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.meta span {
+  color: #183b93;
+}
+
+.cardCopy h2 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 13px 0 9px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cardCopy p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: #4e5659;
+  font: 12px/1.55 Arial, Helvetica, sans-serif;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.readMore {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgb(30 39 42 / 18%);
+  font: 700 11px/1 Arial, Helvetica, sans-serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.readMore b {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.pager button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgb(25 32 36 / 30%);
+  color: #262d31;
+  background: rgb(240 242 241 / 55%);
+  font: 700 12px/1 Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.pager button:hover:not(:disabled),
+.pager button:focus-visible {
+  color: white;
+  background: #183b93;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.pager button:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.pager .activePage {
+  color: white;
+  background: #183b93;
+}
+
+.scene [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.scene [data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsScroll {
+    scroll-behavior: auto;
+  }
+
+  .headline,
+  .headline::before,
+  .previewImage img,
+  .categories button,
+  .cards,
+  .card,
+  .cardImage img,
+  .pager button,
+  .scene [data-reveal] {
+    transition-duration: 0.01ms;
+  }
+
+  .scene [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

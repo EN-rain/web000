@@ -11,4 +11,13 @@
 - Mobile replaces the wide desktop header with logo, pre-register, icon, and hamburger.
 - Mobile home crops the artwork around the central character and centers the ticket near the bottom.
 - Reduced-motion users receive no pointer parallax or decorative drift.
+- Shared menu expands into five numbered route rows and staggers them into view.
+- Character selection crossfades the name, quote, biography, and full-body artwork while the artwork slides upward.
+- Character background video loops silently; decorative particles drift continuously.
+- News uses an internal scroll container; hero and cards reveal with opacity/translate transitions.
+- News category buttons crossfade and filter cards; pagination scrolls the content region back to the card grid.
+- Article headings, paragraphs, and images reveal as they enter the internal scroll viewport.
+- Media Gallery uses a horizontally translated track. The active card scales to 1 while neighbors dim and scale down.
+- Gallery supports buttons, thumbnails, mouse wheel, keyboard arrows, and pointer drag.
+- All motion is disabled or shortened under `prefers-reduced-motion`.
 

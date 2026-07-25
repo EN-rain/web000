@@ -20,3 +20,42 @@ Interaction model: pointer-driven parallax on desktop, static crop on mobile, cl
 
 Interaction model: click-driven paper switching, hover-driven paper overlays, drag/wheel panning.
 
+## `/en-us/roles`
+
+1. Fixed shared top bar.
+2. Full-screen looping atmospheric video and dark technical overlays.
+3. Left character name, epithet, quote, and biography.
+4. Right full-body character artwork.
+5. Bottom-left 15-character portrait carousel.
+6. Faction Gallery opens an overlay panel.
+
+Interaction model: click-driven character carousel, timed reveal transitions, looping video, click-driven faction overlay.
+
+## `/en-us/news`
+
+1. Fixed shared top bar.
+2. Internally scrolling paper-texture news page.
+3. Featured headline list and layered preview card.
+4. Category tabs.
+5. Three-column news-card grid and pagination.
+
+Interaction model: internal smooth scrolling, click-driven categories/pagination, hover-driven previews, viewport reveal animations.
+
+## `/en-us/newsDetail`
+
+1. Fixed shared top bar.
+2. Internally scrolling centered article sheet.
+3. Title/date, rich headings, text, and wide article images.
+4. Footer links.
+
+Interaction model: internal scrolling with staggered section/image reveal.
+
+## `/en-us/features`
+
+1. Fixed shared top bar.
+2. Full-screen dark media-gallery stage.
+3. Upper thumbnail strip.
+4. Oversized horizontal four-card carousel.
+5. Active title/date strip.
+
+Interaction model: click, wheel, keyboard, and drag-driven horizontal carousel with scale/opacity transitions.
