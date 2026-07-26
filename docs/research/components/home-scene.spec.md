@@ -53,5 +53,13 @@
 - Wheel-up before the route threshold reverses the title and restores the Home
   artwork. Arrow/Page Down and Up mirror the wheel progress.
 - The transition background uses slight scale, brightness, and chromatic
-  movement to emulate the original WebGL shader while remaining asset-local.
+  movement plus a canvas-rendered Sobel edge map while remaining asset-local.
+- The canvas sweep moves upward with wheel progress. A bright edge band crosses
+  the character artwork while the region below it becomes a displaced,
+  scan-lined blue field. The lower field reaches roughly 90% darkness near the
+  route threshold.
+- Measured desktop wheel sequence: after `deltaY=120` and 350ms the hero is
+  fully hidden; after another five `deltaY=180` gestures the next-route title is
+  about 0.40 opacity at translateY(261px); another three gestures complete the
+  navigation to `/en-us/roles`.
 - Reduced motion: no parallax.
