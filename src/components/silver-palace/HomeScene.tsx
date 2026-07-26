@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import type { CSSProperties, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
+import {
+  createHomeTransitionRenderer,
+  type HomeTransitionRenderer,
+} from "./HomeTransitionRenderer";
 import styles from "./HomeScene.module.css";
 
 type HomeSceneProps = {
@@ -13,7 +17,8 @@ type HomeSceneProps = {
 };
 
 const PARALLAX_STRENGTH = [4, 8, 13, 19] as const;
-const WHEEL_TRAVEL = 1450;
+const FRAME_DURATION = 1000 / 60;
+const MAX_PROGRESS_STEP = 0.006;
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -22,156 +27,29 @@ const range = (value: number, start: number, end: number) =>
 
 const smoothstep = (value: number) => value * value * (3 - 2 * value);
 
-function drawCover(
-  context: CanvasRenderingContext2D,
-  image: HTMLImageElement,
-  width: number,
-  height: number,
-) {
-  const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
-  const sourceWidth = width / scale;
-  const sourceHeight = height / scale;
-  const sourceX = (image.naturalWidth - sourceWidth) / 2;
-  const sourceY = (image.naturalHeight - sourceHeight) / 2;
-
-  context.drawImage(
-    image,
-    sourceX,
-    sourceY,
-    sourceWidth,
-    sourceHeight,
-    0,
-    0,
-    width,
-    height,
-  );
-}
-
-function buildEdgeMap(
-  source: CanvasRenderingContext2D,
-  target: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-) {
-  const sourceData = source.getImageData(0, 0, width, height);
-  const output = target.createImageData(width, height);
-  const grayscale = new Float32Array(width * height);
-
-  for (let index = 0; index < grayscale.length; index += 1) {
-    const sourceIndex = index * 4;
-    grayscale[index] =
-      sourceData.data[sourceIndex] * 0.2126 +
-      sourceData.data[sourceIndex + 1] * 0.7152 +
-      sourceData.data[sourceIndex + 2] * 0.0722;
-  }
-
-  for (let y = 1; y < height - 1; y += 1) {
-    for (let x = 1; x < width - 1; x += 1) {
-      const index = y * width + x;
-      const gx =
-        -grayscale[index - width - 1] +
-        grayscale[index - width + 1] -
-        grayscale[index - 1] * 2 +
-        grayscale[index + 1] * 2 -
-        grayscale[index + width - 1] +
-        grayscale[index + width + 1];
-      const gy =
-        -grayscale[index - width - 1] -
-        grayscale[index - width] * 2 -
-        grayscale[index - width + 1] +
-        grayscale[index + width - 1] +
-        grayscale[index + width] * 2 +
-        grayscale[index + width + 1];
-      const strength = Math.min(255, Math.hypot(gx, gy) * 1.6);
-      const outputIndex = index * 4;
-
-      output.data[outputIndex] = 232;
-      output.data[outputIndex + 1] = 242;
-      output.data[outputIndex + 2] = 255;
-      output.data[outputIndex + 3] = strength;
-    }
-  }
-
-  target.putImageData(output, 0, 0);
-}
-
 export function HomeScene({ header }: HomeSceneProps) {
   const router = useRouter();
   const sceneRef = useRef<HTMLElement>(null);
   const parallaxFrameRef = useRef<number | null>(null);
   const transitionFrameRef = useRef<number | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const transitionBackgroundRef = useRef<HTMLDivElement>(null);
   const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
-  const shaderBaseRef = useRef<HTMLCanvasElement | null>(null);
-  const shaderEdgesRef = useRef<HTMLCanvasElement | null>(null);
+  const shaderRendererRef = useRef<HomeTransitionRenderer | null>(null);
   const chromaticRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const ticketRef = useRef<HTMLAnchorElement>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
+  const wheelSpeedRef = useRef(0);
+  const lastTransitionTimeRef = useRef(0);
+  const shaderTimeRef = useRef(0);
   const navigatingRef = useRef(false);
   const reducedMotionRef = useRef(false);
   const setTargetProgressRef = useRef<(next: number) => void>(() => undefined);
 
   const renderShader = (progress: number) => {
-    const canvas = shaderCanvasRef.current;
-    const base = shaderBaseRef.current;
-    const edges = shaderEdgesRef.current;
-    const context = canvas?.getContext("2d");
-    if (!canvas || !base || !edges || !context) return;
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const eased = smoothstep(range(progress, 0.04, 0.9));
-    const sweepY = height * (1.02 - eased * 0.78);
-    const bandTop = sweepY - height * 0.19;
-    const bandBottom = sweepY + height * 0.1;
-
-    context.clearRect(0, 0, width, height);
-    context.drawImage(base, 0, 0, width, height);
-
-    const darkness = context.createLinearGradient(0, bandTop, 0, height);
-    darkness.addColorStop(0, "rgba(10, 18, 42, 0)");
-    darkness.addColorStop(0.18, `rgba(9, 16, 38, ${0.5 + eased * 0.2})`);
-    darkness.addColorStop(1, `rgba(14, 22, 48, ${0.84 + eased * 0.1})`);
-    context.fillStyle = darkness;
-    context.fillRect(0, bandTop, width, height - bandTop);
-
-    context.save();
-    context.beginPath();
-    context.rect(0, bandTop, width, Math.max(0, bandBottom - bandTop));
-    context.clip();
-    context.globalCompositeOperation = "screen";
-    context.globalAlpha = 0.8;
-    context.drawImage(edges, 0, 0, width, height);
-    context.restore();
-
-    context.save();
-    context.globalAlpha = 0.05 + eased * 0.06;
-    for (let y = Math.max(0, bandTop); y < height; y += 7) {
-      const distance = Math.abs(y - sweepY) / Math.max(1, height * 0.28);
-      const amplitude = Math.max(0, 1 - distance) * (7 + eased * 10);
-      const offset = Math.sin(y * 0.041 + progress * 19) * amplitude;
-      context.drawImage(
-        base,
-        0,
-        (y / height) * base.height,
-        base.width,
-        Math.max(1, (7 / height) * base.height),
-        offset,
-        y,
-        width,
-        8,
-      );
-    }
-    context.restore();
-
-    context.fillStyle = `rgba(215, 228, 255, ${0.025 + eased * 0.035})`;
-    for (let y = 0; y < height; y += 4) {
-      context.fillRect(0, y, width, 1);
-    }
+    shaderRendererRef.current?.draw(progress, shaderTimeRef.current);
   };
 
   const applyParallax = () => {
@@ -227,17 +105,8 @@ export function HomeScene({ header }: HomeSceneProps) {
       }px, 0)`;
     }
 
-    if (transitionBackgroundRef.current) {
-      transitionBackgroundRef.current.style.transform = `scale(${
-        1.075 - progress * 0.045
-      })`;
-      transitionBackgroundRef.current.style.filter = `brightness(${
-        0.52 + progress * 0.42
-      }) saturate(${0.88 + progress * 0.12})`;
-    }
-
     if (chromaticRef.current) {
-      chromaticRef.current.style.opacity = `${range(progress, 0.08, 0.82) * 0.3}`;
+      chromaticRef.current.style.opacity = "0";
       chromaticRef.current.style.transform = `translate3d(${
         (progress - 0.5) * 13
       }px, 0, 0)`;
@@ -246,22 +115,39 @@ export function HomeScene({ header }: HomeSceneProps) {
     renderShader(progress);
   };
 
-  const animateTransition = () => {
+  const animateTransition = (timestamp: number) => {
+    const elapsed = lastTransitionTimeRef.current
+      ? Math.min(50, timestamp - lastTransitionTimeRef.current)
+      : FRAME_DURATION;
+    const frameScale = elapsed / FRAME_DURATION;
+    lastTransitionTimeRef.current = timestamp;
+    shaderTimeRef.current += 0.01 * frameScale;
+
     const current = currentProgressRef.current;
-    const target = targetProgressRef.current;
-    const ease = reducedMotionRef.current ? 0.34 : 0.105;
-    const next =
-      Math.abs(target - current) < 0.0005
-        ? target
-        : current + (target - current) * ease;
+    let next = current;
+
+    if (current >= 0.8 && current < 1) {
+      next = Math.min(1, current + 0.006 * frameScale);
+    } else if (wheelSpeedRef.current !== 0) {
+      const increment = Math.max(
+        -MAX_PROGRESS_STEP,
+        Math.min(MAX_PROGRESS_STEP, wheelSpeedRef.current * frameScale),
+      );
+      next = clamp(current + increment);
+      const decay = wheelSpeedRef.current < 0 ? 0.96 : 0.9;
+      wheelSpeedRef.current *= Math.pow(decay, frameScale);
+      if (Math.abs(wheelSpeedRef.current) < 0.0002) {
+        wheelSpeedRef.current = 0;
+      }
+    }
 
     currentProgressRef.current = next;
+    targetProgressRef.current = next;
     paintTransition(next);
 
     if (
       !navigatingRef.current &&
-      target >= 1 &&
-      next >= (reducedMotionRef.current ? 0.84 : 0.88)
+      next >= 1
     ) {
       navigatingRef.current = true;
       router.push("/en-us/roles");
@@ -269,7 +155,10 @@ export function HomeScene({ header }: HomeSceneProps) {
       return;
     }
 
-    if (next !== target) {
+    if (
+      (next < 1 && wheelSpeedRef.current !== 0) ||
+      (next >= 0.8 && next < 1)
+    ) {
       transitionFrameRef.current =
         window.requestAnimationFrame(animateTransition);
     } else {
@@ -288,7 +177,19 @@ export function HomeScene({ header }: HomeSceneProps) {
   };
 
   const setTargetProgress = (next: number) => {
-    targetProgressRef.current = clamp(next);
+    const direction = Math.sign(next - currentProgressRef.current);
+    const magnitude = Math.max(
+      0.85,
+      Math.min(Math.abs(next - currentProgressRef.current) * 12, 2),
+    );
+    if (direction > 0) {
+      wheelSpeedRef.current += 0.095 * magnitude;
+    } else if (wheelSpeedRef.current > 0) {
+      wheelSpeedRef.current -= 0.016 * magnitude;
+    } else {
+      wheelSpeedRef.current -= 0.016 * 0.72 * magnitude;
+    }
+    wheelSpeedRef.current = Math.max(-0.045, Math.min(0.045, wheelSpeedRef.current));
     queueTransition();
   };
 
@@ -330,42 +231,25 @@ export function HomeScene({ header }: HomeSceneProps) {
     document.documentElement.style.overflow = "hidden";
     paintTransition(0);
 
-    const initializeShader = () => {
+    let disposed = false;
+
+    const initializeShader = async () => {
       const canvas = shaderCanvasRef.current;
       if (!canvas) return;
 
-      const scale = 0.67;
-      const width = Math.max(1, Math.round(window.innerWidth * scale));
-      const height = Math.max(1, Math.round(window.innerHeight * scale));
-      const image = new window.Image();
-
-      image.onload = () => {
-        const base = document.createElement("canvas");
-        const edges = document.createElement("canvas");
-        base.width = width;
-        base.height = height;
-        edges.width = width;
-        edges.height = height;
-
-        const baseContext = base.getContext("2d", { willReadFrequently: true });
-        const edgeContext = edges.getContext("2d");
-        if (!baseContext || !edgeContext) return;
-
-        drawCover(baseContext, image, width, height);
-        buildEdgeMap(baseContext, edgeContext, width, height);
-
-        canvas.width = width;
-        canvas.height = height;
-        shaderBaseRef.current = base;
-        shaderEdgesRef.current = edges;
-        renderShader(currentProgressRef.current);
-      };
-
-      image.src = "/silver-palace/home_bg3.wAGjrSHo.jpg";
+      shaderRendererRef.current?.dispose();
+      const renderer = await createHomeTransitionRenderer(canvas);
+      if (disposed) {
+        renderer.dispose();
+        return;
+      }
+      shaderRendererRef.current = renderer;
+      renderer.draw(currentProgressRef.current, shaderTimeRef.current);
     };
 
-    initializeShader();
-    window.addEventListener("resize", initializeShader);
+    void initializeShader();
+    const resizeShader = () => shaderRendererRef.current?.resize();
+    window.addEventListener("resize", resizeShader);
 
     const normalizeWheelDelta = (event: WheelEvent) => {
       if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
@@ -381,9 +265,22 @@ export function HomeScene({ header }: HomeSceneProps) {
 
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      setTargetProgressRef.current(
-        targetProgressRef.current + normalizeWheelDelta(event) / WHEEL_TRAVEL,
+      const delta = normalizeWheelDelta(event);
+      const direction = Math.sign(delta);
+      const magnitude = Math.max(0.85, Math.min(Math.abs(delta) / 80, 2));
+
+      if (direction > 0) {
+        wheelSpeedRef.current += 0.095 * magnitude;
+      } else if (wheelSpeedRef.current > 0) {
+        wheelSpeedRef.current -= 0.016 * magnitude;
+      } else {
+        wheelSpeedRef.current -= 0.016 * 0.72 * magnitude;
+      }
+      wheelSpeedRef.current = Math.max(
+        -0.045,
+        Math.min(0.045, wheelSpeedRef.current),
       );
+      queueTransition();
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -414,10 +311,11 @@ export function HomeScene({ header }: HomeSceneProps) {
     motionQuery.addEventListener("change", handleMotionChange);
 
     return () => {
+      disposed = true;
       scene?.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
       motionQuery.removeEventListener("change", handleMotionChange);
-      window.removeEventListener("resize", initializeShader);
+      window.removeEventListener("resize", resizeShader);
       document.body.style.overflow = previousBodyOverflow;
       document.documentElement.style.overflow = previousHtmlOverflow;
 
@@ -428,6 +326,9 @@ export function HomeScene({ header }: HomeSceneProps) {
       if (transitionFrameRef.current !== null) {
         window.cancelAnimationFrame(transitionFrameRef.current);
       }
+
+      shaderRendererRef.current?.dispose();
+      shaderRendererRef.current = null;
     };
     // The transition engine owns mutable animation refs and is installed once
     // for this route instance; rebuilding listeners per frame would reset it.
@@ -454,7 +355,6 @@ export function HomeScene({ header }: HomeSceneProps) {
       }
     >
       <div
-        ref={transitionBackgroundRef}
         className={styles.transitionBackground}
         aria-hidden
       >

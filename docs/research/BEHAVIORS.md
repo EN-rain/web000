@@ -8,8 +8,9 @@
 - Home captures desktop wheel input as cinematic route progress: the layered
   hero fades to `home_bg3`, the `#02 Character Introduction` title rises from
   300px below, and completion navigates to `/en-us/roles`. Wheel-up reverses it.
-- The Home transition uses a live canvas edge-detection sweep and displaced
-  lower field rather than a static crossfade.
+- The Home transition uses a live WebGL mud-normal reveal: the outgoing
+  artwork becomes white etched contours along an irregular rising boundary,
+  while the Character Introduction background replaces the lower field.
 - World is primarily wheel-driven: a fixed viewport consumes wheel input and
   smoothly translates the full desk while each stacked paper moves at a
   different parallax rate. Continued wheel input at a boundary remains clamped.

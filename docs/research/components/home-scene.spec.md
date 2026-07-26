@@ -52,12 +52,13 @@
 - At the end of the title movement, navigation changes to `/en-us/roles`.
 - Wheel-up before the route threshold reverses the title and restores the Home
   artwork. Arrow/Page Down and Up mirror the wheel progress.
-- The transition background uses slight scale, brightness, and chromatic
-  movement plus a canvas-rendered Sobel edge map while remaining asset-local.
-- The canvas sweep moves upward with wheel progress. A bright edge band crosses
-  the character artwork while the region below it becomes a displaced,
-  scan-lined blue field. The lower field reaches roughly 90% darkness near the
-  route threshold.
+- The transition background is rendered in WebGL from `home_bg3`, `char_bg`,
+  and the production `mud_normal` texture.
+- The fragment shader zooms both route textures, creates an irregular
+  scroll-linked boundary from the mud normal, and uses hardware derivatives
+  near that boundary to turn the outgoing artwork into white etched contours.
+  The region below the boundary reveals the blue-gray Character Introduction
+  background.
 - Measured desktop wheel sequence: after `deltaY=120` and 350ms the hero is
   fully hidden; after another five `deltaY=180` gestures the next-route title is
   about 0.40 opacity at translateY(261px); another three gestures complete the
