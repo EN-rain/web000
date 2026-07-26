@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import type { RefObject } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import {
   createRouteTransitionRenderer,
@@ -12,12 +12,15 @@ import {
 import styles from "./ScrollRouteTransition.module.css";
 
 const FRAME_DURATION = 1000 / 60;
-const MAX_PROGRESS_STEP = 0.006;
+const MAX_PROGRESS_STEP = 0.018;
+const COMMIT_PROGRESS = 0.7;
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const range = (value: number, start: number, end: number) =>
   clamp((value - start) / (end - start));
 const smoothstep = (value: number) => value * value * (3 - 2 * value);
+const wheelProgress = (delta: number) =>
+  Math.min(0.24, Math.max(0.055, Math.abs(delta) / 500));
 
 export type ScrollRouteDestination = RouteTransitionOptions & {
   destination: string;
@@ -58,7 +61,7 @@ export function ScrollRouteTransition({
   const activeRef = useRef<TransitionKey | null>(null);
   const frameRef = useRef<number | null>(null);
   const progressRef = useRef(0);
-  const wheelSpeedRef = useRef(0);
+  const targetProgressRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
   const shaderTimeRef = useRef(0);
   const navigatingRef = useRef(false);
@@ -66,7 +69,7 @@ export function ScrollRouteTransition({
   const canStartForwardRef = useRef(canStartForward);
   const canStartBackwardRef = useRef(canStartBackward);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     enabledRef.current = enabled;
     canStartForwardRef.current = canStartForward;
     canStartBackwardRef.current = canStartBackward;
@@ -90,7 +93,7 @@ export function ScrollRouteTransition({
     const reset = () => {
       activeRef.current = null;
       progressRef.current = 0;
-      wheelSpeedRef.current = 0;
+      targetProgressRef.current = 0;
       lastFrameTimeRef.current = 0;
       content.style.opacity = "";
       content.style.pointerEvents = "";
@@ -128,15 +131,15 @@ export function ScrollRouteTransition({
 
     const paint = (progress: number) => {
       const active = activeRef.current;
-      if (!active) return;
+      if (!active || !rendererFor(active)) return;
 
-      const contentProgress = smoothstep(range(progress, 0, 0.16));
+      const overlayProgress = smoothstep(range(progress, 0.02, 0.38));
       const titleProgress = smoothstep(range(progress, 0.43, 0.92));
       if (overlayRef.current) {
-        overlayRef.current.style.opacity = progress > 0.001 ? "1" : "0";
+        overlayRef.current.style.opacity = `${overlayProgress}`;
       }
-      content.style.opacity = `${1 - contentProgress}`;
-      content.style.pointerEvents = contentProgress > 0.5 ? "none" : "";
+      content.style.opacity = "1";
+      content.style.pointerEvents = overlayProgress > 0.5 ? "none" : "";
       if (titleRef.current) {
         titleRef.current.style.opacity = `${titleProgress}`;
         titleRef.current.style.transform = `translate3d(0, ${
@@ -152,6 +155,11 @@ export function ScrollRouteTransition({
         frameRef.current = null;
         return;
       }
+      if (!rendererFor(active)) {
+        lastFrameTimeRef.current = 0;
+        frameRef.current = window.requestAnimationFrame(animate);
+        return;
+      }
 
       const elapsed = lastFrameTimeRef.current
         ? Math.min(50, timestamp - lastFrameTimeRef.current)
@@ -161,39 +169,45 @@ export function ScrollRouteTransition({
       shaderTimeRef.current += 0.01 * frameScale;
 
       const current = progressRef.current;
-      let next = current;
-      if (current >= 0.8 && current < 1) {
-        next = Math.min(1, current + 0.006 * frameScale);
-      } else if (wheelSpeedRef.current !== 0) {
-        next = clamp(
-          current +
-            Math.max(
-              -MAX_PROGRESS_STEP,
-              Math.min(MAX_PROGRESS_STEP, wheelSpeedRef.current * frameScale),
-            ),
-        );
-        const decay = wheelSpeedRef.current < 0 ? 0.96 : 0.9;
-        wheelSpeedRef.current *= Math.pow(decay, frameScale);
-        if (Math.abs(wheelSpeedRef.current) < 0.0002) {
-          wheelSpeedRef.current = 0;
-        }
+      if (
+        current >= COMMIT_PROGRESS &&
+        targetProgressRef.current >= COMMIT_PROGRESS
+      ) {
+        targetProgressRef.current = 1;
+      }
+      const distance = targetProgressRef.current - current;
+      const next =
+        Math.abs(distance) < 0.0005
+          ? targetProgressRef.current
+          : clamp(
+              current +
+                Math.max(
+                  -MAX_PROGRESS_STEP,
+                  Math.min(
+                    MAX_PROGRESS_STEP,
+                    distance * 0.18 * frameScale,
+                  ),
+                ),
+            );
+      if (
+        next >= COMMIT_PROGRESS &&
+        targetProgressRef.current >= COMMIT_PROGRESS
+      ) {
+        targetProgressRef.current = 1;
       }
 
       progressRef.current = next;
       paint(next);
 
       const transition = transitionFor(active);
-      if (!navigatingRef.current && next >= 1 && transition) {
+      if (!navigatingRef.current && next >= 0.999 && transition) {
         navigatingRef.current = true;
         router.push(transition.destination);
         frameRef.current = null;
         return;
       }
 
-      if (
-        (next < 1 && wheelSpeedRef.current !== 0) ||
-        (next >= 0.8 && next < 1)
-      ) {
+      if (Math.abs(targetProgressRef.current - next) >= 0.0005) {
         frameRef.current = window.requestAnimationFrame(animate);
       } else {
         frameRef.current = null;
@@ -223,6 +237,7 @@ export function ScrollRouteTransition({
 
       const delta = normalizeWheelDelta(event);
       const inputDirection = Math.sign(delta);
+      if (inputDirection === 0) return;
       let active = activeRef.current;
 
       if (!active) {
@@ -233,7 +248,7 @@ export function ScrollRouteTransition({
           nextKey === "forward"
             ? canStartForwardRef.current
             : canStartBackwardRef.current;
-        if (!transition || inputDirection === 0 || (canStart && !canStart())) {
+        if (!transition || (canStart && !canStart())) {
           return;
         }
         if (!activate(nextKey)) return;
@@ -243,18 +258,9 @@ export function ScrollRouteTransition({
       event.preventDefault();
       const targetDirection = active === "forward" ? 1 : -1;
       const aligned = inputDirection === targetDirection;
-      const magnitude = Math.max(0.85, Math.min(Math.abs(delta) / 80, 2));
-
-      if (aligned) {
-        wheelSpeedRef.current += 0.095 * magnitude;
-      } else if (wheelSpeedRef.current > 0) {
-        wheelSpeedRef.current -= 0.016 * magnitude;
-      } else {
-        wheelSpeedRef.current -= 0.016 * 0.72 * magnitude;
-      }
-      wheelSpeedRef.current = Math.max(
-        -0.045,
-        Math.min(0.045, wheelSpeedRef.current),
+      targetProgressRef.current = clamp(
+        targetProgressRef.current +
+          (aligned ? 1 : -1) * wheelProgress(delta),
       );
       queue();
     };
@@ -274,6 +280,10 @@ export function ScrollRouteTransition({
         forwardRendererRef.current = renderer;
       } else {
         backwardRendererRef.current = renderer;
+      }
+      if (activeRef.current === key) {
+        paint(progressRef.current);
+        queue();
       }
     };
 
