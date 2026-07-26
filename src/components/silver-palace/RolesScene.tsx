@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
+import { ScrollRouteTransition } from "./ScrollRouteTransition";
 import { SiteHeader } from "./SiteHeader";
 import styles from "./RolesScene.module.css";
 
@@ -188,6 +189,8 @@ const CHARACTERS = [
 type TransitionPhase = "idle" | "exiting" | "entering";
 
 export function RolesScene() {
+  const sceneRef = useRef<HTMLElement>(null);
+  const routeContentRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [renderedIndex, setRenderedIndex] = useState(0);
   const [phase, setPhase] = useState<TransitionPhase>("entering");
@@ -245,8 +248,11 @@ export function RolesScene() {
   }, []);
 
   return (
-    <main className={styles.scene}>
-      <video
+    <main ref={sceneRef} className={styles.scene}>
+      <SiteHeader />
+
+      <div ref={routeContentRef} className={styles.routeContent}>
+        <video
         className={styles.backgroundVideo}
         autoPlay
         loop
@@ -276,8 +282,6 @@ export function RolesScene() {
           />
         ))}
       </div>
-
-      <SiteHeader />
 
       <section
         className={`${styles.copy} ${styles[phase]}`}
@@ -463,6 +467,20 @@ export function RolesScene() {
           </section>
         </div>
       ) : null}
+      </div>
+
+      <ScrollRouteTransition
+        sceneRef={sceneRef}
+        contentRef={routeContentRef}
+        currentImage={`${ASSET_ROOT}/char_bg.C_73WKtR.jpg`}
+        nextImage={`${ASSET_ROOT}/news_bg.LVNfMlKE.jpg`}
+        nextFitTop
+        nextEdgeMultiplier={0}
+        destination="/en-us/news"
+        routeNumber="#03"
+        routeName="News"
+        enabled={!galleryOpen}
+      />
     </main>
   );
 }

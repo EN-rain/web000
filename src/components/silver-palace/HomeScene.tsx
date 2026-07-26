@@ -7,9 +7,9 @@ import type { CSSProperties, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
 import {
-  createHomeTransitionRenderer,
-  type HomeTransitionRenderer,
-} from "./HomeTransitionRenderer";
+  createRouteTransitionRenderer,
+  type RouteTransitionRenderer,
+} from "./RouteTransitionRenderer";
 import styles from "./HomeScene.module.css";
 
 type HomeSceneProps = {
@@ -34,7 +34,7 @@ export function HomeScene({ header }: HomeSceneProps) {
   const transitionFrameRef = useRef<number | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
-  const shaderRendererRef = useRef<HomeTransitionRenderer | null>(null);
+  const shaderRendererRef = useRef<RouteTransitionRenderer | null>(null);
   const chromaticRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const ticketRef = useRef<HTMLAnchorElement>(null);
@@ -238,7 +238,10 @@ export function HomeScene({ header }: HomeSceneProps) {
       if (!canvas) return;
 
       shaderRendererRef.current?.dispose();
-      const renderer = await createHomeTransitionRenderer(canvas);
+      const renderer = await createRouteTransitionRenderer(canvas, {
+        currentImage: "/silver-palace/home_bg3.wAGjrSHo.jpg",
+        nextImage: "/silver-palace/char_bg.C_73WKtR.jpg",
+      });
       if (disposed) {
         renderer.dispose();
         return;

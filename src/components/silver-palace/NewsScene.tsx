@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { SiteHeader } from "./SiteHeader";
+import { ScrollRouteTransition } from "./ScrollRouteTransition";
 import styles from "./NewsScene.module.css";
 
 type Category = "Latest" | "News" | "Notices" | "Events";
@@ -85,6 +86,7 @@ const CATEGORIES: readonly Category[] = [
 const PAGE_SIZE = 3;
 
 export function NewsScene() {
+  const sceneRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLElement>(null);
   const [activeHero, setActiveHero] = useState<NewsItem>(NEWS_ITEMS[2]);
@@ -152,7 +154,7 @@ export function NewsScene() {
   };
 
   return (
-    <main className={styles.scene}>
+    <main ref={sceneRef} className={styles.scene}>
       <SiteHeader />
 
       <div ref={scrollRef} className={styles.newsScroll}>
@@ -327,6 +329,25 @@ export function NewsScene() {
           </section>
         </div>
       </div>
+
+      <ScrollRouteTransition
+        sceneRef={sceneRef}
+        contentRef={scrollRef}
+        currentImage="/silver-palace/news_bg.LVNfMlKE.jpg"
+        nextImage="/silver-palace/feature_bg2.DhK7u9hK.jpg"
+        currentFitTop
+        currentEdgeMultiplier={0}
+        destination="/en-us/features"
+        routeNumber="#04"
+        routeName="Media Gallery"
+        canStart={() => {
+          const root = scrollRef.current;
+          return (
+            !!root &&
+            root.scrollTop >= root.scrollHeight - root.clientHeight - 2
+          );
+        }}
+      />
     </main>
   );
 }

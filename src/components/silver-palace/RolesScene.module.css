@@ -9,6 +9,13 @@
   isolation: isolate;
 }
 
+.routeContent {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  will-change: opacity;
+}
+
 .backgroundVideo,
 .technicalOverlay,
 .haze,

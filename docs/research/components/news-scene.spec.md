@@ -33,4 +33,9 @@
 - Cards link to `/en-us/newsDetail?id=<id>`.
 - Content reveals when entering the internal scroll viewport.
 - Pager changes visible records and smoothly returns to the grid.
-
+- Vertical wheel input continues to scroll `.news-scroll` normally until its
+  bottom boundary.
+- Further wheel-down starts the WebGL route transition from top-aligned
+  `news_bg` to `feature_bg2`; contours are applied to the incoming gallery
+  texture and `#04 Media Gallery` rises before `/en-us/features`.
+- Wheel-up reverses the route transition before its commit threshold.

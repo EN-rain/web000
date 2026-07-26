@@ -32,8 +32,13 @@
 - Prev/next wrap around all 15 characters.
 - Background particles drift continuously.
 - Faction Gallery opens a dark full-viewport panel using camp assets.
+- Desktop wheel-down fades the character scene into a WebGL transition from
+  `char_bg` to the top-aligned `news_bg`.
+- The outgoing character texture becomes white etched contours along the
+  mud-normal boundary; `#03 News` rises before navigation to `/en-us/news`.
+- Wheel-up reverses an in-progress transition. The Faction Gallery disables
+  route scrolling while open.
 
 ## Reduced motion
 
 - Disable particle drift and use immediate state replacement.
-

@@ -18,6 +18,10 @@ uniform float uTime;
 uniform vec2 uResolution;
 uniform vec2 uCurrentImageSize;
 uniform vec2 uNextImageSize;
+uniform float uCurrentFitTop;
+uniform float uNextFitTop;
+uniform float uCurrentEdgeMultiplier;
+uniform float uNextEdgeMultiplier;
 
 in vec2 vUv;
 out vec4 outColor;
@@ -26,7 +30,12 @@ vec2 scaleUv(vec2 uv, float scale, vec2 center) {
   return (uv - center) / scale + center;
 }
 
-vec2 coverUv(vec2 uv, vec2 imageSize, vec2 viewportSize) {
+vec2 coverUv(
+  vec2 uv,
+  vec2 imageSize,
+  vec2 viewportSize,
+  float anchorY
+) {
   float imageRatio = imageSize.x / imageSize.y;
   float viewportRatio = viewportSize.x / viewportSize.y;
   vec2 scaled = vec2(1.0);
@@ -37,7 +46,10 @@ vec2 coverUv(vec2 uv, vec2 imageSize, vec2 viewportSize) {
     scaled.x = viewportRatio / imageRatio;
   }
 
-  vec2 offset = (1.0 - scaled) * 0.5;
+  vec2 offset = vec2(
+    (1.0 - scaled.x) * 0.5,
+    (1.0 - scaled.y) * clamp(anchorY, 0.0, 1.0)
+  );
   return offset + uv * scaled;
 }
 
@@ -55,9 +67,15 @@ void main() {
   vec2 currentSampleUv = coverUv(
     currentUv,
     uCurrentImageSize,
-    uResolution
+    uResolution,
+    uCurrentFitTop > 0.5 ? 0.0 : 0.5
   );
-  vec2 nextSampleUv = coverUv(nextUv, uNextImageSize, uResolution);
+  vec2 nextSampleUv = coverUv(
+    nextUv,
+    uNextImageSize,
+    uResolution,
+    uNextFitTop > 0.5 ? 0.0 : 0.5
+  );
 
   vec4 current = texture(tCurrent, currentSampleUv);
   vec4 next = texture(tNext, nextSampleUv);
@@ -90,12 +108,14 @@ void main() {
     currentEdges = vec3(
       fwidth(currentLuma) *
       mix(5.0, 10.0, easedProgress) *
+      uCurrentEdgeMultiplier *
       edgeProximity
     );
     float nextLuma = dot(next.rgb, vec3(0.299, 0.587, 0.114));
     nextEdges = vec3(
       fwidth(nextLuma) *
       mix(3.0, 5.0, 1.0 - easedProgress) *
+      uNextEdgeMultiplier *
       edgeProximity
     );
   }
@@ -110,12 +130,16 @@ void main() {
   current = mix(
     current,
     vec4(currentEdges, 1.0),
-    smoothstep(0.0, 0.5, easedProgress) * currentEdgeStrength
+    smoothstep(0.0, 0.5, easedProgress) *
+      currentEdgeStrength *
+      uCurrentEdgeMultiplier
   );
   next = mix(
     next,
     vec4(nextEdges, 1.0),
-    smoothstep(0.2, 0.8, 1.0 - easedProgress) * nextEdgeStrength
+    smoothstep(0.2, 0.8, 1.0 - easedProgress) *
+      nextEdgeStrength *
+      uNextEdgeMultiplier
   );
 
   vec4 outputColor = mix(current, next, blendFactor);
@@ -141,7 +165,7 @@ type Uniforms = {
   nextImageSize: WebGLUniformLocation;
 };
 
-export type HomeTransitionRenderer = {
+export type RouteTransitionRenderer = {
   draw: (progress: number, time: number) => void;
   resize: () => void;
   dispose: () => void;
@@ -213,9 +237,19 @@ function createTexture(
   return texture;
 }
 
-export async function createHomeTransitionRenderer(
+export type RouteTransitionOptions = {
+  currentImage: string;
+  nextImage: string;
+  currentFitTop?: boolean;
+  nextFitTop?: boolean;
+  currentEdgeMultiplier?: number;
+  nextEdgeMultiplier?: number;
+};
+
+export async function createRouteTransitionRenderer(
   canvas: HTMLCanvasElement,
-): Promise<HomeTransitionRenderer> {
+  options: RouteTransitionOptions,
+): Promise<RouteTransitionRenderer> {
   const gl = canvas.getContext("webgl2", {
     alpha: false,
     antialias: true,
@@ -224,8 +258,8 @@ export async function createHomeTransitionRenderer(
   if (!gl) throw new Error("WebGL 2 is unavailable.");
 
   const [currentImage, nextImage, mudImage] = await Promise.all([
-    loadImage("/silver-palace/home_bg3.wAGjrSHo.jpg"),
-    loadImage("/silver-palace/char_bg.C_73WKtR.jpg"),
+    loadImage(options.currentImage),
+    loadImage(options.nextImage),
     loadImage("/silver-palace/mud_normal.B0pkdfRk.jpg"),
   ]);
 
@@ -263,6 +297,22 @@ export async function createHomeTransitionRenderer(
   gl.uniform1i(requiredUniform(gl, program, "tCurrent"), 0);
   gl.uniform1i(requiredUniform(gl, program, "tNext"), 1);
   gl.uniform1i(requiredUniform(gl, program, "tMudNormal"), 2);
+  gl.uniform1f(
+    requiredUniform(gl, program, "uCurrentFitTop"),
+    options.currentFitTop ? 1 : 0,
+  );
+  gl.uniform1f(
+    requiredUniform(gl, program, "uNextFitTop"),
+    options.nextFitTop ? 1 : 0,
+  );
+  gl.uniform1f(
+    requiredUniform(gl, program, "uCurrentEdgeMultiplier"),
+    options.currentEdgeMultiplier ?? 1,
+  );
+  gl.uniform1f(
+    requiredUniform(gl, program, "uNextEdgeMultiplier"),
+    options.nextEdgeMultiplier ?? 1,
+  );
 
   const uniforms: Uniforms = {
     progress: requiredUniform(gl, program, "uProgress"),

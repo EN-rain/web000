@@ -26,6 +26,11 @@
 - Character background video loops silently; decorative particles drift continuously.
 - News uses an internal scroll container; hero and cards reveal with opacity/translate transitions.
 - News category buttons crossfade and filter cards; pagination scrolls the content region back to the card grid.
+- Character Introduction continues to News through the shared mud-normal WebGL
+  wheel reveal. News preserves its internal scroll and starts the same route
+  effect only after the scroll container reaches the bottom.
+- News transitions into Media Gallery with `feature_bg2` rising beneath the
+  irregular contour boundary.
 - Article headings, paragraphs, and images reveal as they enter the internal scroll viewport.
 - Media Gallery uses a horizontally translated track. The active card scales to 1 while neighbors dim and scale down.
 - Gallery supports buttons, thumbnails, mouse wheel, keyboard arrows, and pointer drag.

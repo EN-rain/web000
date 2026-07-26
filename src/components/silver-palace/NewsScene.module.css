@@ -20,6 +20,7 @@
       repeat-y;
   scrollbar-color: rgb(40 43 47 / 48%) transparent;
   scrollbar-width: thin;
+  will-change: opacity;
 }
 
 .content {
