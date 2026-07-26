@@ -10,6 +10,10 @@ import {
   type RouteTransitionRenderer,
 } from "./RouteTransitionRenderer";
 import styles from "./ScrollRouteTransition.module.css";
+import {
+  clearRouteEntrance,
+  markRouteEntrance,
+} from "./useRouteEntrance";
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_PROGRESS_STEP = 0.018;
@@ -113,6 +117,7 @@ export function ScrollRouteTransition({
       if (!transition) return false;
 
       activeRef.current = key;
+      clearRouteEntrance(scene);
       forwardCanvas.style.display = key === "forward" ? "block" : "none";
       backwardCanvas.style.display = key === "backward" ? "block" : "none";
       if (overlayRef.current) {
@@ -202,6 +207,7 @@ export function ScrollRouteTransition({
       const transition = transitionFor(active);
       if (!navigatingRef.current && next >= 0.999 && transition) {
         navigatingRef.current = true;
+        markRouteEntrance(transition.destination, active);
         router.push(transition.destination);
         frameRef.current = null;
         return;

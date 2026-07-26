@@ -16,6 +16,7 @@ import {
   ScrollRouteTransition,
   type ScrollRouteDestination,
 } from "./ScrollRouteTransition";
+import { useRouteEntrance } from "./useRouteEntrance";
 import styles from "./FeaturesScene.module.css";
 
 const slides = [
@@ -63,6 +64,7 @@ function relativeOffset(index: number, activeIndex: number) {
 export function FeaturesScene() {
   const sceneRef = useRef<HTMLElement>(null);
   const routeContentRef = useRef<HTMLDivElement>(null);
+  useRouteEntrance(sceneRef, "/en-us/features");
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isHovered, setIsHovered] = useState(false);

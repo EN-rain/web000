@@ -11,6 +11,11 @@ import {
   type RouteTransitionRenderer,
 } from "./RouteTransitionRenderer";
 import styles from "./HomeScene.module.css";
+import {
+  clearRouteEntrance,
+  markRouteEntrance,
+  useRouteEntrance,
+} from "./useRouteEntrance";
 
 type HomeSceneProps = {
   header?: ReactNode;
@@ -49,6 +54,7 @@ export function HomeScene({ header }: HomeSceneProps) {
   const navigatingRef = useRef(false);
   const reducedMotionRef = useRef(false);
   const setTargetProgressRef = useRef<(next: number) => void>(() => undefined);
+  useRouteEntrance(sceneRef, "/en-us/home");
 
   const renderShader = (progress: number) => {
     shaderRendererRef.current?.draw(progress, shaderTimeRef.current);
@@ -168,6 +174,7 @@ export function HomeScene({ header }: HomeSceneProps) {
       next >= 0.999
     ) {
       navigatingRef.current = true;
+      markRouteEntrance("/en-us/roles", "forward");
       router.push("/en-us/roles");
       transitionFrameRef.current = null;
       return;
@@ -275,6 +282,7 @@ export function HomeScene({ header }: HomeSceneProps) {
       const delta = normalizeWheelDelta(event);
       const direction = Math.sign(delta);
       if (direction === 0) return;
+      clearRouteEntrance(scene);
       targetProgressRef.current = clamp(
         targetProgressRef.current + direction * wheelProgress(delta),
       );

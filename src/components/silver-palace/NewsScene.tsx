@@ -9,6 +9,7 @@ import {
   ScrollRouteTransition,
   type ScrollRouteDestination,
 } from "./ScrollRouteTransition";
+import { useRouteEntrance } from "./useRouteEntrance";
 import styles from "./NewsScene.module.css";
 
 const NEXT_ROUTE = {
@@ -113,6 +114,7 @@ export function NewsScene() {
   const sceneRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLElement>(null);
+  useRouteEntrance(sceneRef, "/en-us/news");
   const [activeHero, setActiveHero] = useState<NewsItem>(NEWS_ITEMS[2]);
   const [category, setCategory] = useState<Category>("Latest");
   const [visibleCategory, setVisibleCategory] =

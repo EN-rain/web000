@@ -16,6 +16,64 @@
   will-change: opacity;
 }
 
+.scene[data-route-entry="forward"] {
+  --route-entry-y: 46px;
+}
+
+.scene[data-route-entry="backward"] {
+  --route-entry-y: -46px;
+}
+
+:global(html[data-silver-route-entry]) .scene .copy,
+:global(html[data-silver-route-entry]) .scene .characterArt,
+:global(html[data-silver-route-entry]) .scene .carousel,
+.scene[data-route-entry][data-route-entry-ready="false"] .copy,
+.scene[data-route-entry][data-route-entry-ready="false"] .characterArt,
+.scene[data-route-entry][data-route-entry-ready="false"] .carousel {
+  opacity: 0;
+  animation: none !important;
+  transition: none;
+}
+
+.scene[data-route-entry][data-route-entry-ready="false"] .copy {
+  transform: translate3d(0, var(--route-entry-y), 0);
+}
+
+.scene[data-route-entry][data-route-entry-ready="false"] .characterArt {
+  transform: translate3d(0, calc(var(--route-entry-y) * 1.35), 0)
+    scale(0.985);
+}
+
+.scene[data-route-entry][data-route-entry-ready="false"] .carousel {
+  transform: translate3d(0, calc(var(--route-entry-y) * 0.65), 0);
+}
+
+.scene[data-route-entry][data-route-entry-ready="true"] .copy,
+.scene[data-route-entry][data-route-entry-ready="true"] .characterArt,
+.scene[data-route-entry][data-route-entry-ready="true"] .carousel {
+  opacity: 1;
+  animation: none !important;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.scene[data-route-entry][data-route-entry-ready="true"] .characterArt {
+  transition:
+    opacity 560ms 40ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 820ms 40ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scene[data-route-entry][data-route-entry-ready="true"] .copy {
+  transition:
+    opacity 520ms 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 720ms 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scene[data-route-entry][data-route-entry-ready="true"] .carousel {
+  transition:
+    opacity 460ms 210ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 620ms 210ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .backgroundVideo,
 .technicalOverlay,
 .haze,
@@ -552,6 +610,14 @@
   .avatar,
   .arrow,
   .galleryClose {
+    transition: none;
+  }
+
+  .scene[data-route-entry] .copy,
+  .scene[data-route-entry] .characterArt,
+  .scene[data-route-entry] .carousel {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

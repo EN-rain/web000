@@ -8,6 +8,7 @@ import {
   ScrollRouteTransition,
   type ScrollRouteDestination,
 } from "./ScrollRouteTransition";
+import { useRouteEntrance } from "./useRouteEntrance";
 import { SiteHeader } from "./SiteHeader";
 import styles from "./RolesScene.module.css";
 
@@ -213,6 +214,7 @@ type TransitionPhase = "idle" | "exiting" | "entering";
 export function RolesScene() {
   const sceneRef = useRef<HTMLElement>(null);
   const routeContentRef = useRef<HTMLDivElement>(null);
+  useRouteEntrance(sceneRef, "/en-us/roles");
   const [activeIndex, setActiveIndex] = useState(0);
   const [renderedIndex, setRenderedIndex] = useState(0);
   const [phase, setPhase] = useState<TransitionPhase>("entering");
