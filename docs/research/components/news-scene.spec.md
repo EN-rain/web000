@@ -38,4 +38,7 @@
 - Further wheel-down starts the WebGL route transition from top-aligned
   `news_bg` to `feature_bg2`; contours are applied to the incoming gallery
   texture and `#04 Media Gallery` rises before `/en-us/features`.
-- Wheel-up reverses the route transition before its commit threshold.
+- At the top boundary, wheel-up runs the same shader in reverse toward
+  `char_bg`; `#02 Character Introduction` rises before `/en-us/roles`.
+- Opposite wheel input reverses an in-progress transition before its commit
+  threshold.

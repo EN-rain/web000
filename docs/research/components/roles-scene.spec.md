@@ -36,8 +36,10 @@
   `char_bg` to the top-aligned `news_bg`.
 - The outgoing character texture becomes white etched contours along the
   mud-normal boundary; `#03 News` rises before navigation to `/en-us/news`.
-- Wheel-up reverses an in-progress transition. The Faction Gallery disables
-  route scrolling while open.
+- Desktop wheel-up runs the shader in reverse from `char_bg` to `home_bg3`;
+  `#01 Home` rises before navigation to `/en-us/home`.
+- Opposite wheel input reverses an in-progress transition. The Faction Gallery
+  disables route scrolling while open.
 
 ## Reduced motion
 

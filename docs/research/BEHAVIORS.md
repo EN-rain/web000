@@ -31,6 +31,9 @@
   effect only after the scroll container reaches the bottom.
 - News transitions into Media Gallery with `feature_bg2` rising beneath the
   irregular contour boundary.
+- Wheel-up mirrors that WebGL route chain: Media Gallery returns to News, News
+  returns to Character Introduction at its top boundary, and Character
+  Introduction returns to Home.
 - Article headings, paragraphs, and images reveal as they enter the internal scroll viewport.
 - Media Gallery uses a horizontally translated track. The active card scales to 1 while neighbors dim and scale down.
 - Gallery supports buttons, thumbnails, mouse wheel, keyboard arrows, and pointer drag.

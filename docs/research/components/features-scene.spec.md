@@ -30,4 +30,6 @@
 - Horizontal wheel, pointer drag, and keyboard arrows switch slides.
 - Card hover adds a subtle zoom and reveals a play glyph.
 - Autoplay advances every 6 seconds and pauses on hover/focus.
-
+- Vertical wheel-up starts the reverse mud-normal WebGL reveal from
+  `feature_bg2` to top-aligned `news_bg`; `#03 News` rises before navigation
+  to `/en-us/news`.

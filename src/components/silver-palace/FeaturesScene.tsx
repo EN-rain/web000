@@ -12,6 +12,10 @@ import {
 } from "react";
 
 import { SiteHeader } from "./SiteHeader";
+import {
+  ScrollRouteTransition,
+  type ScrollRouteDestination,
+} from "./ScrollRouteTransition";
 import styles from "./FeaturesScene.module.css";
 
 const slides = [
@@ -40,6 +44,16 @@ const slides = [
 
 const DRAG_THRESHOLD = 55;
 const WHEEL_COOLDOWN = 650;
+const PREVIOUS_ROUTE = {
+  currentImage: "/silver-palace/feature_bg2.DhK7u9hK.jpg",
+  nextImage: "/silver-palace/news_bg.LVNfMlKE.jpg",
+  nextFitTop: true,
+  nextEdgeMultiplier: 0,
+  direction: -1,
+  destination: "/en-us/news",
+  routeNumber: "#03",
+  routeName: "News",
+} satisfies ScrollRouteDestination;
 
 function relativeOffset(index: number, activeIndex: number) {
   const offset = (index - activeIndex + slides.length) % slides.length;
@@ -47,6 +61,8 @@ function relativeOffset(index: number, activeIndex: number) {
 }
 
 export function FeaturesScene() {
+  const sceneRef = useRef<HTMLElement>(null);
+  const routeContentRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -132,6 +148,7 @@ export function FeaturesScene() {
 
   return (
     <main
+      ref={sceneRef}
       className={styles.scene}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -151,10 +168,11 @@ export function FeaturesScene() {
         }
       }}
     >
-      <div className={styles.background} aria-hidden />
       <SiteHeader />
 
-      <section className={styles.gallery} aria-roledescription="carousel" aria-label="Media Gallery">
+      <div ref={routeContentRef} className={styles.routeContent}>
+        <div className={styles.background} aria-hidden />
+        <section className={styles.gallery} aria-roledescription="carousel" aria-label="Media Gallery">
         <h1>Media Gallery</h1>
 
         <div className={styles.thumbnails}>
@@ -257,7 +275,13 @@ export function FeaturesScene() {
         <p className={styles.status} aria-live="polite">
           {activeIndex + 1} of {slides.length}: {slides[activeIndex].title}
         </p>
-      </section>
+        </section>
+      </div>
+      <ScrollRouteTransition
+        sceneRef={sceneRef}
+        contentRef={routeContentRef}
+        backward={PREVIOUS_ROUTE}
+      />
     </main>
   );
 }

@@ -5,8 +5,32 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { SiteHeader } from "./SiteHeader";
-import { ScrollRouteTransition } from "./ScrollRouteTransition";
+import {
+  ScrollRouteTransition,
+  type ScrollRouteDestination,
+} from "./ScrollRouteTransition";
 import styles from "./NewsScene.module.css";
+
+const NEXT_ROUTE = {
+  currentImage: "/silver-palace/news_bg.LVNfMlKE.jpg",
+  nextImage: "/silver-palace/feature_bg2.DhK7u9hK.jpg",
+  currentFitTop: true,
+  currentEdgeMultiplier: 0,
+  destination: "/en-us/features",
+  routeNumber: "#04",
+  routeName: "Media Gallery",
+} satisfies ScrollRouteDestination;
+
+const PREVIOUS_ROUTE = {
+  currentImage: "/silver-palace/news_bg.LVNfMlKE.jpg",
+  nextImage: "/silver-palace/char_bg.C_73WKtR.jpg",
+  currentFitTop: true,
+  currentEdgeMultiplier: 0,
+  direction: -1,
+  destination: "/en-us/roles",
+  routeNumber: "#02",
+  routeName: "Character Introduction",
+} satisfies ScrollRouteDestination;
 
 type Category = "Latest" | "News" | "Notices" | "Events";
 
@@ -333,19 +357,18 @@ export function NewsScene() {
       <ScrollRouteTransition
         sceneRef={sceneRef}
         contentRef={scrollRef}
-        currentImage="/silver-palace/news_bg.LVNfMlKE.jpg"
-        nextImage="/silver-palace/feature_bg2.DhK7u9hK.jpg"
-        currentFitTop
-        currentEdgeMultiplier={0}
-        destination="/en-us/features"
-        routeNumber="#04"
-        routeName="Media Gallery"
-        canStart={() => {
+        forward={NEXT_ROUTE}
+        backward={PREVIOUS_ROUTE}
+        canStartForward={() => {
           const root = scrollRef.current;
           return (
             !!root &&
             root.scrollTop >= root.scrollHeight - root.clientHeight - 2
           );
+        }}
+        canStartBackward={() => {
+          const root = scrollRef.current;
+          return !!root && root.scrollTop <= 2;
         }}
       />
     </main>

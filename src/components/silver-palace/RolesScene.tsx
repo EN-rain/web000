@@ -4,11 +4,33 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { ScrollRouteTransition } from "./ScrollRouteTransition";
+import {
+  ScrollRouteTransition,
+  type ScrollRouteDestination,
+} from "./ScrollRouteTransition";
 import { SiteHeader } from "./SiteHeader";
 import styles from "./RolesScene.module.css";
 
 const ASSET_ROOT = "/silver-palace";
+
+const NEXT_ROUTE = {
+  currentImage: `${ASSET_ROOT}/char_bg.C_73WKtR.jpg`,
+  nextImage: `${ASSET_ROOT}/news_bg.LVNfMlKE.jpg`,
+  nextFitTop: true,
+  nextEdgeMultiplier: 0,
+  destination: "/en-us/news",
+  routeNumber: "#03",
+  routeName: "News",
+} satisfies ScrollRouteDestination;
+
+const PREVIOUS_ROUTE = {
+  currentImage: `${ASSET_ROOT}/char_bg.C_73WKtR.jpg`,
+  nextImage: `${ASSET_ROOT}/home_bg3.wAGjrSHo.jpg`,
+  direction: -1,
+  destination: "/en-us/home",
+  routeNumber: "#01",
+  routeName: "Home",
+} satisfies ScrollRouteDestination;
 
 const ART_ASSETS = [
   "char_2d_img_0.D6JuRUsV.png",
@@ -472,13 +494,8 @@ export function RolesScene() {
       <ScrollRouteTransition
         sceneRef={sceneRef}
         contentRef={routeContentRef}
-        currentImage={`${ASSET_ROOT}/char_bg.C_73WKtR.jpg`}
-        nextImage={`${ASSET_ROOT}/news_bg.LVNfMlKE.jpg`}
-        nextFitTop
-        nextEdgeMultiplier={0}
-        destination="/en-us/news"
-        routeNumber="#03"
-        routeName="News"
+        forward={NEXT_ROUTE}
+        backward={PREVIOUS_ROUTE}
         enabled={!galleryOpen}
       />
     </main>

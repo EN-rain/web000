@@ -22,6 +22,7 @@ uniform float uCurrentFitTop;
 uniform float uNextFitTop;
 uniform float uCurrentEdgeMultiplier;
 uniform float uNextEdgeMultiplier;
+uniform float uDirection;
 
 in vec2 vUv;
 out vec4 outColor;
@@ -56,6 +57,7 @@ vec2 coverUv(
 void main() {
   vec2 uv = vUv;
   float progress = uProgress;
+  float direction = uDirection >= 0.0 ? 1.0 : -1.0;
   float easedProgress = mix(
     progress * progress * (3.0 - 2.0 * progress),
     progress,
@@ -88,8 +90,8 @@ void main() {
   );
   float mudOffset = (mudNormal.r - 0.5) * mudStrength;
 
-  float verticalAxis = uv.y;
-  float directionalAxis = uv.x;
+  float verticalAxis = direction > 0.0 ? uv.y : (1.0 - uv.y);
+  float directionalAxis = direction > 0.0 ? uv.x : (1.0 - uv.x);
   float centerMix =
     (1.0 - smoothstep(-0.4, 0.6, abs(uv.x - 0.5))) * 0.5;
   float threshold = mix(verticalAxis, directionalAxis, centerMix);
@@ -244,6 +246,7 @@ export type RouteTransitionOptions = {
   nextFitTop?: boolean;
   currentEdgeMultiplier?: number;
   nextEdgeMultiplier?: number;
+  direction?: 1 | -1;
 };
 
 export async function createRouteTransitionRenderer(
@@ -312,6 +315,10 @@ export async function createRouteTransitionRenderer(
   gl.uniform1f(
     requiredUniform(gl, program, "uNextEdgeMultiplier"),
     options.nextEdgeMultiplier ?? 1,
+  );
+  gl.uniform1f(
+    requiredUniform(gl, program, "uDirection"),
+    options.direction ?? 1,
   );
 
   const uniforms: Uniforms = {
