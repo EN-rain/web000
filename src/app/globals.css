@@ -163,8 +163,8 @@
     max-width: 1120px;
     color: #fff;
     content: var(--silver-route-name);
-    font: 400 90px/0.98 Georgia, "Times New Roman", serif;
-    letter-spacing: -0.035em;
+    font: 400 90px/1 "Times New Roman", Times, serif;
+    letter-spacing: normal;
     text-shadow: 0 4px 30px rgb(0 0 0 / 24%);
   }
 }

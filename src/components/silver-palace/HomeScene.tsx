@@ -21,7 +21,7 @@ type HomeSceneProps = {
   header?: ReactNode;
 };
 
-const PARALLAX_STRENGTH = [4, 8, 13, 19] as const;
+const PARALLAX_STRENGTH = [24, 31, 39, 49, 60] as const;
 const FRAME_DURATION = 1000 / 60;
 const MAX_PROGRESS_STEP = 0.018;
 const COMMIT_PROGRESS = 0.86;
@@ -68,8 +68,7 @@ export function HomeScene({ header }: HomeSceneProps) {
       return;
     }
 
-    PARALLAX_STRENGTH.forEach((strength, index) => {
-      const layer = index + 1;
+    PARALLAX_STRENGTH.forEach((strength, layer) => {
       scene.style.setProperty(
         `--layer-${layer}-x`,
         `${pointerRef.current.x * strength}px`,

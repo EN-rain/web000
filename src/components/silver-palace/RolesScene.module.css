@@ -600,6 +600,36 @@
   }
 }
 
+@media (min-width: 1441px) {
+  .copy,
+  .carousel {
+    --silver-desktop-scale: calc(100vw / 1422.222px);
+
+    left: 12.5vw;
+    scale: var(--silver-desktop-scale);
+    transform-origin: left top;
+  }
+
+  .copy {
+    top: 22.5%;
+  }
+
+  .carousel {
+    top: 68.6%;
+  }
+
+  .characterArt {
+    top: 3.333%;
+    left: 36.72%;
+    width: 53.32vw;
+    height: 96.67%;
+  }
+
+  .characterArt img {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .particles i,
   .copy.entering,

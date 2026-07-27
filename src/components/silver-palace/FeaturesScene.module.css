@@ -337,6 +337,63 @@
   white-space: nowrap;
 }
 
+@media (min-width: 1441px) {
+  .gallery h1 {
+    top: calc(9.84375vw - 27.75px);
+    left: 12.109375vw;
+    font-size: clamp(72px, 4.6875vw, 90px);
+    letter-spacing: normal;
+  }
+
+  .thumbnails {
+    --silver-desktop-scale: calc(100vw / 1440px);
+
+    top: 16.944vh;
+    left: 56.25vw;
+    scale: var(--silver-desktop-scale);
+    transform-origin: left top;
+  }
+
+  .carousel {
+    top: calc(11.276vw + 147.63px);
+    height: 610px;
+  }
+
+  .track {
+    width: 3124px;
+    height: 524px;
+    scale: none;
+  }
+
+  .card {
+    left: calc(50% - 428.25px);
+    width: 856.5px;
+    height: 524px;
+    transform:
+      translate3d(calc(var(--card-offset) * 874.5px + var(--drag-offset)), 0, 0)
+      scale(0.88);
+  }
+
+  .activeCard {
+    transform:
+      translate3d(calc(var(--card-offset) * 874.5px + var(--drag-offset)), 0, 0)
+      scale(1);
+  }
+
+  .cardButton {
+    grid-template-rows: 482px 42px;
+  }
+
+  .cardInfo {
+    padding-inline: 16px;
+    font-size: 14.5px;
+  }
+
+  .cardInfo time {
+    font-size: 12px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card,
   .cardImage,

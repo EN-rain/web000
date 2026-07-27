@@ -79,6 +79,7 @@
 .background {
   z-index: 1;
   background-image: url("/silver-palace/home_bg.nynm9_TJ.jpg");
+  transform: translate3d(var(--layer-0-x), var(--layer-0-y), 0) scale(1.025);
 }
 
 .parallaxOne {
@@ -137,11 +138,11 @@
 
 .routeTitle {
   max-width: 920px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 90px;
   font-weight: 400;
   line-height: 90px;
-  letter-spacing: -0.035em;
+  letter-spacing: normal;
   text-wrap: balance;
   text-shadow: 0 4px 30px rgb(0 0 0 / 24%);
 }
@@ -182,6 +183,13 @@
   width: 31.6%;
   height: auto;
   user-select: none;
+}
+
+@media (min-width: 1441px) {
+  .ticket {
+    top: 69%;
+    width: 28.125vw;
+  }
 }
 
 .scene[data-route-entry="forward"] {

@@ -49,6 +49,22 @@
   letter-spacing: -0.045em;
 }
 
+@media (min-width: 1441px) {
+  .newsScroll {
+    background-size: 100vw auto;
+  }
+
+  .content {
+    --silver-desktop-scale: calc(100vw / 1440px);
+
+    left: calc(50% - 540px);
+    min-height: calc(1717px * (100vw / 1440px));
+    margin: 0;
+    scale: var(--silver-desktop-scale);
+    transform-origin: top center;
+  }
+}
+
 .titleBlock img {
   position: absolute;
   top: 73px;

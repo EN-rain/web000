@@ -16,6 +16,16 @@
   backdrop-filter: blur(4px);
 }
 
+@media (min-width: 1441px) {
+  .header {
+    --silver-desktop-scale: calc(100vw / 1440px);
+
+    top: calc(100vw * 15 / 1440);
+    transform: translateX(-50%) scale(var(--silver-desktop-scale));
+    transform-origin: top center;
+  }
+}
+
 .logo {
   display: block;
   width: 169px;

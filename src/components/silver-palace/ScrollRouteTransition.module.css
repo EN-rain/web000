@@ -42,11 +42,11 @@
 
 .routeName {
   max-width: 1120px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 90px;
   font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  line-height: 1;
+  letter-spacing: normal;
   text-wrap: balance;
   text-shadow: 0 4px 30px rgb(0 0 0 / 24%);
 }
