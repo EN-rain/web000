@@ -10,14 +10,11 @@ import {
   type RouteTransitionRenderer,
 } from "./RouteTransitionRenderer";
 import styles from "./ScrollRouteTransition.module.css";
-import {
-  clearRouteEntrance,
-  markRouteEntrance,
-} from "./useRouteEntrance";
+import { markRouteEntrance } from "./useRouteEntrance";
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_PROGRESS_STEP = 0.018;
-const COMMIT_PROGRESS = 0.7;
+const COMMIT_PROGRESS = 0.86;
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const range = (value: number, start: number, end: number) =>
@@ -117,7 +114,6 @@ export function ScrollRouteTransition({
       if (!transition) return false;
 
       activeRef.current = key;
-      clearRouteEntrance(scene);
       forwardCanvas.style.display = key === "forward" ? "block" : "none";
       backwardCanvas.style.display = key === "backward" ? "block" : "none";
       if (overlayRef.current) {
@@ -147,9 +143,8 @@ export function ScrollRouteTransition({
       content.style.pointerEvents = overlayProgress > 0.5 ? "none" : "";
       if (titleRef.current) {
         titleRef.current.style.opacity = `${titleProgress}`;
-        titleRef.current.style.transform = `translate3d(0, ${
-          300 - titleProgress * 78 - titleProgress * titleProgress * 51
-        }px, 0)`;
+        titleRef.current.style.transform =
+          `translate3d(0, ${(1 - titleProgress) * 300}px, 0)`;
       }
       rendererFor(active)?.draw(progress, shaderTimeRef.current);
     };
@@ -207,8 +202,12 @@ export function ScrollRouteTransition({
       const transition = transitionFor(active);
       if (!navigatingRef.current && next >= 0.999 && transition) {
         navigatingRef.current = true;
-        markRouteEntrance(transition.destination, active);
-        router.push(transition.destination);
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            markRouteEntrance(transition.destination, active);
+            router.push(transition.destination);
+          });
+        });
         frameRef.current = null;
         return;
       }

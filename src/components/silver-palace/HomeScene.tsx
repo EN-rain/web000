@@ -24,7 +24,7 @@ type HomeSceneProps = {
 const PARALLAX_STRENGTH = [4, 8, 13, 19] as const;
 const FRAME_DURATION = 1000 / 60;
 const MAX_PROGRESS_STEP = 0.018;
-const COMMIT_PROGRESS = 0.7;
+const COMMIT_PROGRESS = 0.86;
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -108,9 +108,8 @@ export function HomeScene({ header }: HomeSceneProps) {
 
     if (titleRef.current) {
       titleRef.current.style.opacity = `${titleProgress}`;
-      titleRef.current.style.transform = `translate3d(0, ${
-        300 - titleProgress * 78 - titleProgress * titleProgress * 51
-      }px, 0)`;
+      titleRef.current.style.transform =
+        `translate3d(0, ${(1 - titleProgress) * 300}px, 0)`;
     }
 
     if (chromaticRef.current) {
@@ -174,8 +173,12 @@ export function HomeScene({ header }: HomeSceneProps) {
       next >= 0.999
     ) {
       navigatingRef.current = true;
-      markRouteEntrance("/en-us/roles", "forward");
-      router.push("/en-us/roles");
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          markRouteEntrance("/en-us/roles", "forward");
+          router.push("/en-us/roles");
+        });
+      });
       transitionFrameRef.current = null;
       return;
     }
@@ -258,6 +261,7 @@ export function HomeScene({ header }: HomeSceneProps) {
       }
       shaderRendererRef.current = renderer;
       renderer.draw(currentProgressRef.current, shaderTimeRef.current);
+      canvas.style.opacity = "1";
       queueTransition();
     };
 
@@ -335,6 +339,9 @@ export function HomeScene({ header }: HomeSceneProps) {
 
       shaderRendererRef.current?.dispose();
       shaderRendererRef.current = null;
+      if (shaderCanvasRef.current) {
+        shaderCanvasRef.current.style.opacity = "0";
+      }
     };
     // The transition engine owns mutable animation refs and is installed once
     // for this route instance; rebuilding listeners per frame would reset it.

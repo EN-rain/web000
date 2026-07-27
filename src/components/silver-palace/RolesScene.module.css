@@ -36,12 +36,16 @@
 }
 
 .scene[data-route-entry][data-route-entry-ready="false"] .copy {
-  transform: translate3d(0, var(--route-entry-y), 0);
+  transform: translate3d(0, calc(var(--route-entry-y) * 0.25), 0);
 }
 
 .scene[data-route-entry][data-route-entry-ready="false"] .characterArt {
-  transform: translate3d(0, calc(var(--route-entry-y) * 1.35), 0)
-    scale(0.985);
+  transform: translate3d(
+      calc(var(--route-entry-y) * 1.45),
+      calc(var(--route-entry-y) * 0.65),
+      0
+    )
+    scale(0.96);
 }
 
 .scene[data-route-entry][data-route-entry-ready="false"] .carousel {
@@ -58,20 +62,20 @@
 
 .scene[data-route-entry][data-route-entry-ready="true"] .characterArt {
   transition:
-    opacity 560ms 40ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 820ms 40ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 420ms 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 620ms 380ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .copy {
   transition:
-    opacity 520ms 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 720ms 120ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .carousel {
   transition:
-    opacity 460ms 210ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 620ms 210ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 240ms 80ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 360ms 80ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .backgroundVideo,
@@ -134,15 +138,17 @@
 }
 
 .name {
-  width: 365px;
+  width: 600px;
   height: 65px;
+  overflow: visible;
 }
 
 .name img {
-  width: 100%;
-  height: 100%;
+  width: 600px;
+  height: 97px;
   object-fit: contain;
   object-position: left center;
+  transform: translateY(-23px);
 }
 
 .identityRow {
@@ -150,7 +156,7 @@
   height: 37px;
   align-items: center;
   gap: 17px;
-  margin-top: 19px;
+  margin-top: 25px;
 }
 
 .epithet {
@@ -220,7 +226,7 @@
 
 .quote {
   width: 400px;
-  margin: 27px 0 0;
+  margin: 33px 0 0;
   color: #f3f2ee;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
@@ -241,8 +247,8 @@
 .characterArt {
   position: absolute;
   z-index: 2;
-  top: 12%;
-  left: 36%;
+  top: 13%;
+  left: 27%;
   width: min(73vw, 1050px);
   height: 98%;
   pointer-events: none;
@@ -254,6 +260,8 @@
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
+  transform: scale(0.89);
+  transform-origin: center top;
 }
 
 .copy.exiting,
