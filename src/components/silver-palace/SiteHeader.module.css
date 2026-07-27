@@ -18,11 +18,17 @@
 
 @media (min-width: 1441px) {
   .header {
-    --silver-desktop-scale: calc(100vw / 1440px);
+    --sp-rem: min(3.90625vw, 7.1839vh);
+    --silver-desktop-scale: calc(var(--sp-rem) / 55.6701px);
 
-    top: calc(100vw * 15 / 1440);
+    top: calc(0.25 * var(--sp-rem));
+    height: 60px;
     transform: translateX(-50%) scale(var(--silver-desktop-scale));
     transform-origin: top center;
+  }
+
+  .logo {
+    width: 167px;
   }
 }
 

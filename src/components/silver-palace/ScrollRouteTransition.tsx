@@ -142,9 +142,14 @@ export function ScrollRouteTransition({
       content.style.opacity = "1";
       content.style.pointerEvents = overlayProgress > 0.5 ? "none" : "";
       if (titleRef.current) {
+        const routeTitleTravel =
+          Math.min(
+            window.innerWidth * 0.0390625,
+            window.innerHeight * 0.071839,
+          ) * 0.08;
         titleRef.current.style.opacity = `${titleProgress}`;
         titleRef.current.style.transform =
-          `translate3d(0, ${(1 - titleProgress) * 300}px, 0)`;
+          `translate3d(0, ${(1 - titleProgress) * routeTitleTravel}px, 0)`;
       }
       rendererFor(active)?.draw(progress, shaderTimeRef.current);
     };

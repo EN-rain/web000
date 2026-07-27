@@ -17,11 +17,11 @@
 }
 
 .scene[data-route-entry="forward"] {
-  --route-entry-y: 46px;
+  --route-entry-y: 6px;
 }
 
 .scene[data-route-entry="backward"] {
-  --route-entry-y: -46px;
+  --route-entry-y: -6px;
 }
 
 :global(html[data-silver-route-entry]) .scene .copy,
@@ -41,11 +41,11 @@
 
 .scene[data-route-entry][data-route-entry-ready="false"] .characterArt {
   transform: translate3d(
-      calc(var(--route-entry-y) * 1.45),
-      calc(var(--route-entry-y) * 0.65),
+      var(--route-entry-y),
+      calc(var(--route-entry-y) * 0.5),
       0
     )
-    scale(0.96);
+    scale(0.995);
 }
 
 .scene[data-route-entry][data-route-entry-ready="false"] .carousel {
@@ -62,20 +62,20 @@
 
 .scene[data-route-entry][data-route-entry-ready="true"] .characterArt {
   transition:
-    opacity 420ms 380ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 620ms 380ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .copy {
   transition:
-    opacity 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .carousel {
   transition:
-    opacity 240ms 80ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 360ms 80ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .backgroundVideo,
@@ -603,26 +603,30 @@
 @media (min-width: 1441px) {
   .copy,
   .carousel {
-    --silver-desktop-scale: calc(100vw / 1422.222px);
+    --sp-rem: min(3.90625vw, 7.1839vh);
+    --silver-desktop-scale: calc(var(--sp-rem) / 55.5556px);
 
-    left: 12.5vw;
+    left: calc(50% - 9.6 * var(--sp-rem));
     scale: var(--silver-desktop-scale);
     transform-origin: left top;
   }
 
   .copy {
-    top: 22.5%;
+    top: calc(3 * var(--sp-rem));
   }
 
   .carousel {
-    top: 68.6%;
+    top: calc(9.6 * var(--sp-rem));
   }
 
   .characterArt {
-    top: 3.333%;
-    left: 36.72%;
-    width: 53.32vw;
-    height: 96.67%;
+    --sp-rem: min(3.90625vw, 7.1839vh);
+
+    top: 0;
+    right: calc(50% - 9.6 * var(--sp-rem) - 0.64 * var(--sp-rem));
+    left: auto;
+    width: auto;
+    height: 100%;
   }
 
   .characterArt img {

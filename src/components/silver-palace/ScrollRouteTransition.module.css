@@ -18,10 +18,12 @@
 }
 
 .routeTitle {
+  --sp-rem: min(3.90625vw, 7.1839vh);
+
   position: absolute;
   z-index: 1;
-  top: 225px;
-  left: 12.1vw;
+  top: calc(3 * var(--sp-rem));
+  left: calc(50% - 9.7 * var(--sp-rem));
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -32,6 +34,7 @@
 }
 
 .routeNumber {
+  display: none;
   margin-bottom: 19px;
   color: rgb(196 198 202 / 72%);
   font-family: Arial, Helvetica, sans-serif;
@@ -42,11 +45,11 @@
 
 .routeName {
   max-width: 1120px;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 90px;
-  font-weight: 400;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: calc(1.2 * var(--sp-rem));
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: normal;
+  letter-spacing: 0.35px;
   text-wrap: balance;
   text-shadow: 0 4px 30px rgb(0 0 0 / 24%);
 }

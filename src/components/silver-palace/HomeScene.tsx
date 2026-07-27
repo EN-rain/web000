@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { CSSProperties, PointerEvent, ReactNode } from "react";
+import type { PointerEvent, ReactNode } from "react";
 import { useLayoutEffect, useRef } from "react";
 
 import {
@@ -39,6 +39,7 @@ export function HomeScene({ header }: HomeSceneProps) {
   const router = useRouter();
   const sceneRef = useRef<HTMLElement>(null);
   const parallaxFrameRef = useRef<number | null>(null);
+  const parallaxLayersRef = useRef<Array<HTMLDivElement | null>>([]);
   const transitionFrameRef = useRef<number | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -47,6 +48,7 @@ export function HomeScene({ header }: HomeSceneProps) {
   const titleRef = useRef<HTMLDivElement>(null);
   const ticketRef = useRef<HTMLAnchorElement>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
+  const renderedPointerRef = useRef({ x: 0, y: 0 });
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const lastTransitionTimeRef = useRef(0);
@@ -61,25 +63,32 @@ export function HomeScene({ header }: HomeSceneProps) {
   };
 
   const applyParallax = () => {
-    const scene = sceneRef.current;
-
-    if (!scene) {
+    if (!sceneRef.current) {
       parallaxFrameRef.current = null;
       return;
     }
 
+    renderedPointerRef.current.x +=
+      (pointerRef.current.x - renderedPointerRef.current.x) * 0.12;
+    renderedPointerRef.current.y +=
+      (pointerRef.current.y - renderedPointerRef.current.y) * 0.12;
+
     PARALLAX_STRENGTH.forEach((strength, layer) => {
-      scene.style.setProperty(
-        `--layer-${layer}-x`,
-        `${pointerRef.current.x * strength}px`,
-      );
-      scene.style.setProperty(
-        `--layer-${layer}-y`,
-        `${pointerRef.current.y * strength * 0.65}px`,
-      );
+      const element = parallaxLayersRef.current[layer];
+      if (!element) return;
+      const x = renderedPointerRef.current.x * strength;
+      const y = renderedPointerRef.current.y * strength * 0.65;
+      element.style.transform =
+        `translate3d(${x}px, ${y}px, 0) scale(1.025)`;
     });
 
-    parallaxFrameRef.current = null;
+    const distance =
+      Math.abs(pointerRef.current.x - renderedPointerRef.current.x) +
+      Math.abs(pointerRef.current.y - renderedPointerRef.current.y);
+    parallaxFrameRef.current =
+      distance > 0.0005
+        ? window.requestAnimationFrame(applyParallax)
+        : null;
   };
 
   const queueParallax = () => {
@@ -106,9 +115,12 @@ export function HomeScene({ header }: HomeSceneProps) {
     }
 
     if (titleRef.current) {
+      const routeTitleTravel =
+        Math.min(window.innerWidth * 0.0390625, window.innerHeight * 0.071839) *
+        0.08;
       titleRef.current.style.opacity = `${titleProgress}`;
       titleRef.current.style.transform =
-        `translate3d(0, ${(1 - titleProgress) * 300}px, 0)`;
+        `translate3d(0, ${(1 - titleProgress) * routeTitleTravel}px, 0)`;
     }
 
     if (chromaticRef.current) {
@@ -211,9 +223,10 @@ export function HomeScene({ header }: HomeSceneProps) {
 
   const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
     if (
-      event.pointerType !== "mouse" ||
+      event.pointerType === "touch" ||
+      reducedMotionRef.current ||
       !window.matchMedia(
-        "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+        "(hover: hover) and (pointer: fine)",
       ).matches
     ) {
       return;
@@ -353,18 +366,6 @@ export function HomeScene({ header }: HomeSceneProps) {
       className={styles.scene}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      style={
-        {
-          "--layer-1-x": "0px",
-          "--layer-1-y": "0px",
-          "--layer-2-x": "0px",
-          "--layer-2-y": "0px",
-          "--layer-3-x": "0px",
-          "--layer-3-y": "0px",
-          "--layer-4-x": "0px",
-          "--layer-4-y": "0px",
-        } as CSSProperties
-      }
     >
       <div
         className={styles.transitionBackground}
@@ -375,11 +376,41 @@ export function HomeScene({ header }: HomeSceneProps) {
       <div ref={chromaticRef} className={styles.chromatic} aria-hidden />
 
       <div ref={heroRef} className={styles.hero}>
-        <div className={`${styles.layer} ${styles.background}`} aria-hidden />
-        <div className={`${styles.layer} ${styles.parallaxOne}`} aria-hidden />
-        <div className={`${styles.layer} ${styles.parallaxTwo}`} aria-hidden />
-        <div className={`${styles.layer} ${styles.parallaxThree}`} aria-hidden />
-        <div className={`${styles.layer} ${styles.parallaxFour}`} aria-hidden />
+        <div
+          ref={(element) => {
+            parallaxLayersRef.current[0] = element;
+          }}
+          className={`${styles.layer} ${styles.background}`}
+          aria-hidden
+        />
+        <div
+          ref={(element) => {
+            parallaxLayersRef.current[1] = element;
+          }}
+          className={`${styles.layer} ${styles.parallaxOne}`}
+          aria-hidden
+        />
+        <div
+          ref={(element) => {
+            parallaxLayersRef.current[2] = element;
+          }}
+          className={`${styles.layer} ${styles.parallaxTwo}`}
+          aria-hidden
+        />
+        <div
+          ref={(element) => {
+            parallaxLayersRef.current[3] = element;
+          }}
+          className={`${styles.layer} ${styles.parallaxThree}`}
+          aria-hidden
+        />
+        <div
+          ref={(element) => {
+            parallaxLayersRef.current[4] = element;
+          }}
+          className={`${styles.layer} ${styles.parallaxFour}`}
+          aria-hidden
+        />
         <div className={styles.mask} aria-hidden />
       </div>
 

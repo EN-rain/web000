@@ -33,11 +33,11 @@
 }
 
 .scene[data-route-entry="forward"] {
-  --route-entry-y: 42px;
+  --route-entry-y: 6px;
 }
 
 .scene[data-route-entry="backward"] {
-  --route-entry-y: -42px;
+  --route-entry-y: -6px;
 }
 
 :global(html[data-silver-route-entry]) .scene .gallery h1,
@@ -71,20 +71,20 @@
 
 .scene[data-route-entry][data-route-entry-ready="true"] .gallery h1 {
   transition:
-    opacity 480ms 80ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 680ms 80ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .thumbnails {
   transition:
-    opacity 440ms 150ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 620ms 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .scene[data-route-entry][data-route-entry-ready="true"] .carousel {
   transition:
-    opacity 560ms 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 820ms 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 320ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .gallery h1 {
@@ -310,8 +310,8 @@
 
 .activeCard .cardButton:hover .cardImage,
 .activeCard .cardButton:focus-visible .cardImage {
-  filter: brightness(0.84);
-  transform: scale(1.045);
+  filter: brightness(0.9);
+  transform: none;
 }
 
 .activeCard .cardButton:hover .play,
@@ -338,59 +338,76 @@
 }
 
 @media (min-width: 1441px) {
+  .scene {
+    --sp-rem: min(3.90625vw, 7.1839vh);
+  }
+
   .gallery h1 {
-    top: calc(9.84375vw - 27.75px);
-    left: 12.109375vw;
-    font-size: clamp(72px, 4.6875vw, 90px);
-    letter-spacing: normal;
+    top: calc(2.15 * var(--sp-rem));
+    left: calc(50% - 9.7 * var(--sp-rem));
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: calc(1.2 * var(--sp-rem));
+    font-weight: 700;
+    letter-spacing: 0.35px;
   }
 
   .thumbnails {
-    --silver-desktop-scale: calc(100vw / 1440px);
-
-    top: 16.944vh;
-    left: 56.25vw;
-    scale: var(--silver-desktop-scale);
+    top: calc(2.44 * var(--sp-rem));
+    right: calc(50% - 9.64 * var(--sp-rem));
+    left: auto;
+    scale: none;
     transform-origin: left top;
   }
 
   .carousel {
-    top: calc(11.276vw + 147.63px);
-    height: 610px;
+    top: calc(50% + 1.62 * var(--sp-rem));
+    height: calc(7.11 * var(--sp-rem));
+    translate: 0 -50%;
   }
 
   .track {
-    width: 3124px;
-    height: 524px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
     scale: none;
   }
 
   .card {
-    left: calc(50% - 428.25px);
-    width: 856.5px;
-    height: 524px;
+    left: calc(50% - 5.729 * var(--sp-rem));
+    width: calc(11.42 * var(--sp-rem));
+    height: calc(7.12 * var(--sp-rem));
     transform:
-      translate3d(calc(var(--card-offset) * 874.5px + var(--drag-offset)), 0, 0)
-      scale(0.88);
+      translate3d(
+        calc(var(--card-offset) * 11.66 * var(--sp-rem) + var(--drag-offset)),
+        0,
+        0
+      );
   }
 
   .activeCard {
     transform:
-      translate3d(calc(var(--card-offset) * 874.5px + var(--drag-offset)), 0, 0)
-      scale(1);
+      translate3d(
+        calc(var(--card-offset) * 11.66 * var(--sp-rem) + var(--drag-offset)),
+        0,
+        0
+      );
   }
 
   .cardButton {
-    grid-template-rows: 482px 42px;
+    grid-template-rows:
+      calc(6.44 * var(--sp-rem))
+      calc(0.68 * var(--sp-rem));
   }
 
   .cardInfo {
-    padding-inline: 16px;
-    font-size: 14.5px;
+    padding-inline: calc(0.22 * var(--sp-rem));
+    font-size: calc(0.2 * var(--sp-rem));
   }
 
   .cardInfo time {
-    font-size: 12px;
+    font-size: calc(0.14 * var(--sp-rem));
   }
 }
 

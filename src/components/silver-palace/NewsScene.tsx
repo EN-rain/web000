@@ -36,7 +36,7 @@ const PREVIOUS_ROUTE = {
 type Category = "Latest" | "News" | "Notices" | "Events";
 
 type NewsItem = {
-  id: 93 | 88 | 86 | 71 | 65 | 60;
+  id: number;
   title: string;
   date: string;
   category: Exclude<Category, "Latest">;
@@ -45,6 +45,15 @@ type NewsItem = {
 };
 
 const NEWS_ITEMS: readonly NewsItem[] = [
+  {
+    id: 99,
+    title: "The Science of All Things - Curious Deductions Edition",
+    date: "2026-07-24",
+    category: "News",
+    excerpt:
+      "Follow the latest curious deductions and discoveries from Silvernia.",
+    image: "/silver-palace/ca712a13b015578dc3ec3411c223fd36.png",
+  },
   {
     id: 93,
     title: "The Science of All Things - Combat Edition",
