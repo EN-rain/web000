@@ -447,12 +447,19 @@
     transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.scene[data-route-entry][data-route-entry-ready="true"] .headlines {
-  transition-delay: 90ms;
+.scene[data-route-entry][data-route-entry-ready="true"]
+  .titleBlock[data-visible="true"] {
+  transition-delay: 40ms;
 }
 
-.scene[data-route-entry][data-route-entry-ready="true"] .preview {
-  transition-delay: 170ms;
+.scene[data-route-entry][data-route-entry-ready="true"]
+  .headlines[data-visible="true"] {
+  transition-delay: 130ms;
+}
+
+.scene[data-route-entry][data-route-entry-ready="true"]
+  .preview[data-visible="true"] {
+  transition-delay: 220ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

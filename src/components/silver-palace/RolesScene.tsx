@@ -217,7 +217,7 @@ export function RolesScene() {
   useRouteEntrance(sceneRef, "/en-us/roles");
   const [activeIndex, setActiveIndex] = useState(0);
   const [renderedIndex, setRenderedIndex] = useState(0);
-  const [phase, setPhase] = useState<TransitionPhase>("entering");
+  const [phase, setPhase] = useState<TransitionPhase>("idle");
   const [galleryOpen, setGalleryOpen] = useState(false);
   const timersRef = useRef<number[]>([]);
   const character = CHARACTERS[renderedIndex];
